@@ -36,7 +36,11 @@ const questionSchema = new mongoose.Schema({
             trim: true,
             required: true
         }
-    ]
+    ],
+    count: {
+        type: Number,
+        default: 0
+    }
 });
 
 const question = mongoose.model("question", questionSchema);

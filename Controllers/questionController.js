@@ -2,8 +2,11 @@ const Question = require("../Models/question");
 const addquestions = async ({ body }, res) => {
     try {
         const responseData = body;
-        await questionResponse.create({ correctId: responseData.corId, quesId: responseData.quesId });
-        let result = await Question.create(responseData);
+        const quesId = responseData.quesId;
+        const ques = Question.findOne({ quesId: quesId });
+        if (ques) return res.status(409).json({ success: false, msg: "Question already exists" });
+        let quesCount = ques.count++;
+        let result = await Question.create({ ...responseData, count: quesCount });
         const { correctId, ...info } = result._doc;
         return res.status(201).json({ success: true, msg: info });
     } catch (error) {
@@ -72,9 +75,8 @@ const searchquestion = async (req, res) => {
 const countQuestion = async (req, res) => {
     try {
         const category = req.query.category;
-        const catQuestionsCount = await Question.count({category});
-        const categoryResponse = await Question.find({category});
-        return res.status(200).json({ success: true, msg: {catQuestionsCount, categoryResponse} });
+        const categoryResponse = await Question.find({ category });
+        return res.status(200).json({ success: true, msg: { categoryResponse } });
 
     } catch (error) {
         return res.status(error.status || 500).json({ error: { message: error.message || "Internal Server Error" } });
