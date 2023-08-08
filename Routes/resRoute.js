@@ -1,4 +1,4 @@
-const { response } = require("../controllers/responseController");
+const { response } = require("../Controllers/responseController");
 
 const router = require("express").Router();
 
