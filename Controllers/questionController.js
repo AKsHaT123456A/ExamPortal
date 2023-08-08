@@ -3,16 +3,25 @@ const addquestions = async ({ body }, res) => {
     try {
         const responseData = body;
         const quesId = responseData.quesId;
-        const ques = Question.findOne({ quesId: quesId });
-        if (ques) return res.status(409).json({ success: false, msg: "Question already exists" });
-        let quesCount = ques.count++;
-        let result = await Question.create({ ...responseData, count: quesCount });
-        const { correctId, ...info } = result._doc;
+
+        const ques = await Question.findOne({ quesId });
+
+        if (ques) {
+            return res.status(409).json({ success: false, msg: "Question already exists" });
+        }
+
+        const totalCount = await Question.countDocuments();
+
+        const result = await Question.create({ ...responseData, count: totalCount + 1 });
+
+        const { correctId,_id, ...info } = result._doc;
+
         return res.status(201).json({ success: true, msg: info });
     } catch (error) {
-        return createError.createErrorHandler(res, 500, error.message);
+        return res.status(error.status || 500).json({ error: { message: error.message || "Internal Server Error" } });
     }
 };
+
 const getquestions = async (req, res) => {
     try {
         const data = await Question.find({});
