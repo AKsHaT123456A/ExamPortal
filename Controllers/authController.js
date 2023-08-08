@@ -3,7 +3,6 @@ const User = require('../Models/user');
 const constants = require('../Connections/constants');
 const register = async (req, res) => {
     try {
-        console.log(constants);
         // Validate and sanitize input data
         const { name, email, branch, gender, isHosteler, studentNo, recaptchaResponse } = req.body;
 
@@ -14,13 +13,11 @@ const register = async (req, res) => {
         // }
 
         const existingUser = await User.findOne({ email });
-        console.log(existingUser);
         if (existingUser) {
             return res.status(400).json({ message: 'User with this email already exists' });
         }
-
-        const password = `${name.toLowerCase().split(' ').join('')}${studentNo}`;
-
+        const firstName = name.split(' ')[0];
+        const password = `${firstName.toLowerCase()}${studentNo}`;
         await User.create({
             name,
             email,

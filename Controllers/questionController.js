@@ -69,6 +69,18 @@ const searchquestion = async (req, res) => {
         return res.status(error.status || 500).json({ error: { message: error.message || "Internal Server Error" } });
     }
 };
+const countQuestion = async (req, res) => {
+    try {
+        const category = req.query.category;
+        const catQuestionsCount = await Question.count({category});
+        const categoryResponse = await Question.find({category});
+        return res.status(200).json({ success: true, msg: {catQuestionsCount, categoryResponse} });
+
+    } catch (error) {
+        return res.status(error.status || 500).json({ error: { message: error.message || "Internal Server Error" } });
+
+    }
+}
 module.exports = {
     addquestions,
     getquestions,
@@ -76,4 +88,5 @@ module.exports = {
     updatequestion,
     categoryquestion,
     searchquestion,
+    countQuestion
 };

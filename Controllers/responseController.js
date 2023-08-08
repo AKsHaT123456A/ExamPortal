@@ -10,7 +10,7 @@ const cache = new Map();
 const getResponseFromCacheOrDatabase = async (id, status, quesId, ansId) => {
     const cacheKey = `${id}_${status}_${ansId}`;
     const cachedResponse = cache.get(cacheKey);
-    
+
     if (cachedResponse) {
         return cachedResponse;
     }

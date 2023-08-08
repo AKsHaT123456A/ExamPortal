@@ -12,7 +12,9 @@ require("dotenv").config();
 const authRouter = require("./Routes/authRoute");
 const resRouter = require("./Routes/resRoute");
 const leadRouter = require("./Routes/leaderRoute");
+const quesRouter = require("./Routes/quesRoute");
 const { updateLeaderboard } = require("./Utils/leaderSocket");
+const browserOnlyMiddleware = require("./middleware.js/browserCheckMiddleware");
 
 
 
@@ -32,6 +34,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(compression());
+// app.use(browserOnlyMiddleware);
 
 const allowedOrigins = ['http://localhost:5173', "http://127.0.0.1:5173", 'http://localhost:3000', 'http://127.0.0.1:5500', 'deployed link'];
 
@@ -65,6 +68,7 @@ app.use(
     helmet.contentSecurityPolicy()
 );
 
+
 // Socket.IO connection event
 io.on('connection', (socket) => {
     console.log('A user connected');
@@ -82,10 +86,10 @@ app.get("/", (req, res) => {
 });
 
 //! Routes
-// app.use(`${apiPrefix}`, quesRouter);
 app.use(`${apiPrefix}`, authRouter);
 app.use(`${apiPrefix}`, resRouter);
 app.use(`${apiPrefix}`, leadRouter);
+app.use(`${apiPrefix}`, quesRouter);
 
 
 // Start the server
