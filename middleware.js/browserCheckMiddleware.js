@@ -1,4 +1,4 @@
-const isBrowser = require('../utils/browserCheck');
+const isBrowser = require("../Utils/browserCheck");
 
 function browserOnlyMiddleware(req, res, next) {
   if (isBrowser(req)) {
