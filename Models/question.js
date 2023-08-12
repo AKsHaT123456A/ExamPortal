@@ -15,10 +15,17 @@ const questionSchema = new mongoose.Schema({
     },
     options: [
         {
-            type: String,
-            trim: true,
-            required: [true, "Please add option field"],
-        },
+            name: {
+                type: String,
+                trim: true,
+                required: [true, "Please add option field"],
+            },
+            ansId: {
+                type: String,
+                trim: true,
+                required: [true, "Please add ansId field"],
+            },
+        }
     ],
     quesId: {
         type: String,
@@ -30,18 +37,11 @@ const questionSchema = new mongoose.Schema({
         trim: true,
         required: true,
     },
-    ansId: [
-        {
-            type: String,
-            trim: true,
-            required: true
-        }
-    ],
     count: {
         type: Number,
         default: 0
     }
-},{ versionKey: false });
+}, { versionKey: false });
 
 const Question = mongoose.model("Question", questionSchema);
 module.exports = Question;
