@@ -14,7 +14,7 @@ const addquestions = async ({ body }, res) => {
 
         const result = await Question.create({ ...responseData, count: totalCount + 1 });
 
-        const { correctId, _id, ...info } = result._doc;
+        const { correctId, ...info } = result._doc;
 
         return res.status(201).json({ success: true, msg: info });
     } catch (error) {

@@ -3,7 +3,7 @@ const User = require("../Models/user");
 // Function to retrieve leaderboard data
 const getLeaderboard = async () => {
     try {
-        const users = await User.find({}, "name totalScore").sort({ totalScore: -1 });
+        const users = await User.find({}, "studentNo totalScore").sort({ totalScore: -1 });
         return users;
     } catch (error) {
         console.log(error);
