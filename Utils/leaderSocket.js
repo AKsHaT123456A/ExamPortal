@@ -1,20 +1,28 @@
 const User = require("../Models/user");
 
-// Function to retrieve leaderboard data
-const getLeaderboard = async () => {
-    try {
-        const users = await User.find({}, "studentNo name totalScore").sort({ totalScore: -1 });
-        return users;
-    } catch (error) {
-        console.log(error);
-        return [];
-    }
-};
+module.exports.socketSetup = (io) => {
+    let leaderboardData = []; // Initialize leaderboard data
 
-// Function to emit leaderboard data to connected clients
-const updateLeaderboard = async (io) => {
-    const users = await getLeaderboard();
-    io.emit("leaderboard", users);
-};
+    const updateLeaderboardAndEmit = async () => {
+        try {
+            leaderboardData = await User.find({}, 'studentNo name totalScore').sort({ totalScore: -1 });
+            io.emit("leaderboard", leaderboardData);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-module.exports = { getLeaderboard, updateLeaderboard };
+    io.on("connection", (socket) => {
+        console.log("A user connected");
+
+        // Send initial leaderboard data to the client
+        socket.emit("leaderboard", leaderboardData);
+
+        socket.on("disconnect", () => {
+            console.log("A user disconnected");
+        });
+    });
+
+    // Simulate leaderboard updates every few seconds
+    setInterval(updateLeaderboardAndEmit, 5000);
+};

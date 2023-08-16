@@ -63,6 +63,7 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
         });
     }
     const report = await updateTotalScoreAndCounts(id, oldAnsStatus, ansStatus);
+    console.log(id, oldAnsStatus, ansStatus);
     const user = await User.findById(id).populate({ path: "responses", select: "ansStatus score" });
     const updateCounts = {
         markedUnanswered: report.counts.markedUnanswered + user.counts.markedUnanswered,
@@ -100,8 +101,7 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
 module.exports.response = async (req, res) => {
     try {
         const { id } = req.params;
-        const { ansId, status, quesId } = req.query;
-
+        const { ansId, status, quesId } = req.body;
         const response = await getResponseFromCacheOrDatabase(id, status, quesId, ansId);
 
         return res.status(200).json(response);
