@@ -1,13 +1,13 @@
 const User = require("../Models/user");
 
-const updateTotalScoreAndCounts = async (id, ansStatus, score) => {
+const updateTotalScoreAndCounts = async (id, oldAnsStatus, newAnsStatus) => {
     const user = await User.findById(id);
+
     try {
         if (!user) {
             return false;
         }
 
-        let totalScore = 0;
         const counts = {
             markedUnanswered: 0,
             unanswered: 0,
@@ -16,7 +16,33 @@ const updateTotalScoreAndCounts = async (id, ansStatus, score) => {
             markedWrong: 0,
             wrong: 0,
         };
-        switch (ansStatus) {
+
+        // Decrement old count based on oldAnsStatus
+        switch (oldAnsStatus) {
+            case 3:
+                counts.markedUnanswered--;
+                break;
+            case 0:
+                counts.unanswered--;
+                break;
+            case 2:
+                counts.markedCorrect--;
+                break;
+            case 1:
+                counts.correct--;
+                break;
+            case -1:
+                counts.markedWrong--;
+                break;
+            case -2:
+                counts.wrong--;
+                break;
+            default:
+                break;
+        }
+
+        // Increment new count based on newAnsStatus
+        switch (newAnsStatus) {
             case 3:
                 counts.markedUnanswered++;
                 break;
@@ -25,29 +51,23 @@ const updateTotalScoreAndCounts = async (id, ansStatus, score) => {
                 break;
             case 2:
                 counts.markedCorrect++;
-                totalScore += score;
                 break;
             case 1:
                 counts.correct++;
-                totalScore += score;
                 break;
             case -1:
                 counts.markedWrong++;
-                totalScore -= score;
                 break;
             case -2:
                 counts.wrong++;
-                totalScore -= score;
                 break;
             default:
                 break;
         }
+
         counts.unanswered = 30 - (counts.markedCorrect + counts.correct + counts.markedWrong + counts.wrong);
 
-        user.totalScore = totalScore;
-        user.counts = counts;
-        await user.save();
-        return { totalScore: totalScore, counts: counts };
+        return { counts: counts };
     } catch (error) {
         console.log(error);
         throw error;

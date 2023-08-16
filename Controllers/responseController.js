@@ -22,7 +22,7 @@ const getResponseFromCacheOrDatabase = async (id, status, quesId, ansId) => {
     return response;
 };
 
-// Function to fetch response from the database
+/// Function to fetch response from the database
 const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
     // Find the question based on quesId
     const ques = await Question.findOne({ quesId });
@@ -46,39 +46,61 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
         score = 0;
     }
 
-    const report = await updateTotalScoreAndCounts(id, ansStatus, score);
-    if (!report) { return { message: "User not found" }; }
-
-    let existingResponse = await questionResponse.findOne({ quesId: quesId });
+    let existingResponse = await questionResponse.findOne({ quesId, userId: id });
+    let oldAnsStatus = existingResponse ? existingResponse.ansStatus : 5;
 
     if (existingResponse) {
         existingResponse.ansStatus = ansStatus;
         existingResponse.score = score;
+
         await existingResponse.save();
     } else {
         existingResponse = await questionResponse.create({
             ansStatus: ansStatus,
             score: score,
             quesId: quesId,
+            userId: id
         });
-
-        await User.findByIdAndUpdate(id, {
-            $push: { responses: existingResponse }
-        }).populate({ path: "responses", select: "ansStatus score" });
     }
-    const user = await User.findById(id).select("responses totalScore counts");
+    const report = await updateTotalScoreAndCounts(id, oldAnsStatus, ansStatus);
+    const user = await User.findById(id).populate({ path: "responses", select: "ansStatus score" });
+    const updateCounts = {
+        markedUnanswered: report.counts.markedUnanswered + user.counts.markedUnanswered,
+        markedCorrect: report.counts.markedCorrect + user.counts.markedCorrect,
+        markedWrong: report.counts.markedWrong + user.counts.markedWrong,
+        correct: report.counts.correct + user.counts.correct,
+        wrong: report.counts.wrong + user.counts.wrong,
+        unanswered: 0
+    };
+
+    updateCounts.unanswered = 30 - (updateCounts.markedCorrect + updateCounts.correct + updateCounts.markedWrong + updateCounts.wrong);
+
+    user.counts.markedUnanswered = updateCounts.markedUnanswered;
+    user.counts.markedCorrect = updateCounts.markedCorrect;
+    user.counts.markedWrong = updateCounts.markedWrong;
+    user.counts.correct = updateCounts.correct;
+    user.counts.wrong = updateCounts.wrong;
+    user.counts.unanswered = updateCounts.unanswered;
+    let totalScore = updateCounts.markedCorrect + updateCounts.correct;
+    user.totalScore = totalScore
+    await user.save();
+    try {
+        await user.save();
+        console.log("User saved successfully.");
+    } catch (error) {
+        console.error("Error saving user:", error);
+    }
     return {
         message: existingResponse._id ? "Response updated successfully" : "Response recorded successfully",
-        totalscore: report.totalScore,
-        counts: report.counts,
-        existingResponse: user
+        totalscore: user.totalScore,
+        user: user.counts
     };
 };
 
 module.exports.response = async (req, res) => {
     try {
         const { id } = req.params;
-        const { ansId, status, quesId } = req.query;
+        const { ansId, status, quesId } = req.body;
 
         const response = await getResponseFromCacheOrDatabase(id, status, quesId, ansId);
 
