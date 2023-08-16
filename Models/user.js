@@ -25,6 +25,14 @@ const userSchema = new mongoose.Schema(
             markedWrong: { type: Number, default: 0 },
             wrong: { type: Number, default: 0 },
         },
+        isRelogin:{
+            type:Boolean,
+            default:false
+        },
+        logintime:{
+            type:Number,
+            default:0
+        }
     },
     { versionKey: false }
 );

@@ -47,6 +47,8 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
     }
 
     const report = await updateTotalScoreAndCounts(id, ansStatus, score);
+    if (!report) { return { message: "User not found" }; }
+
     let existingResponse = await questionResponse.findOne({ quesId: quesId });
 
     if (existingResponse) {
@@ -64,11 +66,12 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
             $push: { responses: existingResponse }
         }).populate({ path: "responses", select: "ansStatus score" });
     }
-
+    const user = await User.findById(id).select("responses totalScore counts");
     return {
         message: existingResponse._id ? "Response updated successfully" : "Response recorded successfully",
         totalscore: report.totalScore,
-        counts: report.counts
+        counts: report.counts,
+        existingResponse: user
     };
 };
 
