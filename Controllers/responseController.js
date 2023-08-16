@@ -78,7 +78,7 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
 module.exports.response = async (req, res) => {
     try {
         const { id } = req.params;
-        const { ansId, status, quesId } = req.body;
+        const { ansId, status, quesId } = req.query;
 
         const response = await getResponseFromCacheOrDatabase(id, status, quesId, ansId);
 
