@@ -15,6 +15,10 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 const apiPrefix = '/api/v1';
+const authRoute = require("./Routes/authRoute");
+const leadRoute = require("./Routes/leaderRoute");
+const quesRoute = require("./Routes/quesRoute");
+const resRoute = require("./Routes/resRoute");
 
 // Database connection
 connectDB();
@@ -37,16 +41,10 @@ app.use(
 socketSetup(io);
 
 // Routes
-const routes = [
-    { path: "/auth", router: require("./Routes/authRoute") },
-    { path: "/res", router: require("./Routes/resRoute") },
-    { path: "/lead", router: require("./Routes/leaderRoute") },
-    { path: "/ques", router: require("./Routes/quesRoute") },
-];
-
-routes.forEach(route => {
-    app.use(`${apiPrefix}${route.path}`, route.router);
-});
+app.use(`${apiPrefix}`,authRoute);
+app.use(`${apiPrefix}`,leadRoute);
+app.use(`${apiPrefix}`,quesRoute);
+app.use(`${apiPrefix}`,resRoute);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
