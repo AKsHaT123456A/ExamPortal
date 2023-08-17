@@ -29,14 +29,14 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
     if (!ques) {
         throw new Error('Question not found!');
     }
-
     const { correctId } = ques;
-    let ansStatus, score;
+    let ansStatus = 0, score = 0;
+
     if (!ansId && status !== 0) {
         ansStatus = status === 1 ? 3 : 0; // Marked for review and unanswered or unanswered
         score = 0;
     } else if (ansId === correctId) {
-        ansStatus = status + 1; // Correct answer
+        ansStatus = status === 0 ? 1 : 2; // Convert to decimal explicitly
         score = 1;
     } else if (status === 1) {
         ansStatus = -1; // Wrong and marked for review
@@ -46,6 +46,8 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
         score = 0;
     }
 
+
+    console.log(ansStatus, score);
     let existingResponse = await questionResponse.findOne({ quesId, userId: id });
     let oldAnsStatus = existingResponse ? existingResponse.ansStatus : 5;
 
@@ -66,11 +68,11 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
     console.log(id, oldAnsStatus, ansStatus);
     const user = await User.findById(id).populate({ path: "responses", select: "ansStatus score" });
     const updateCounts = {
-        markedUnanswered: report.counts.markedUnanswered + user.counts.markedUnanswered,
-        markedCorrect: report.counts.markedCorrect + user.counts.markedCorrect,
-        markedWrong: report.counts.markedWrong + user.counts.markedWrong,
-        correct: report.counts.correct + user.counts.correct,
-        wrong: report.counts.wrong + user.counts.wrong,
+        markedUnanswered: Math.max(0, report.counts.markedUnanswered + user.counts.markedUnanswered),
+        markedCorrect: Math.max(0, report.counts.markedCorrect + user.counts.markedCorrect),
+        markedWrong: Math.max(0, report.counts.markedWrong + user.counts.markedWrong),
+        correct: Math.max(0, report.counts.correct + user.counts.correct),
+        wrong: Math.max(0, report.counts.wrong + user.counts.wrong),
         unanswered: 0
     };
 

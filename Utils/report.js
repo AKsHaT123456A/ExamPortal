@@ -20,22 +20,22 @@ const updateTotalScoreAndCounts = async (id, oldAnsStatus, newAnsStatus) => {
         // Decrement old count based on oldAnsStatus
         switch (oldAnsStatus) {
             case 3:
-                counts.markedUnanswered--;
+                Math.max(0,counts.markedUnanswered--);
                 break;
             case 0:
-                counts.unanswered--;
+                Math.max(0,counts.unanswered--);
                 break;
             case 2:
-                counts.markedCorrect--;
+                Math.max(counts.markedCorrect--);
                 break;
             case 1:
-                counts.correct--;
+                Math.max(0,counts.correct--);
                 break;
             case -1:
-                counts.markedWrong--;
+                Math.max(counts.markedWrong--);
                 break;
             case -2:
-                counts.wrong--;
+                Math.max(0,counts.wrong--);
                 break;
             default:
                 break;
@@ -66,7 +66,6 @@ const updateTotalScoreAndCounts = async (id, oldAnsStatus, newAnsStatus) => {
         }
 
         counts.unanswered = 30 - (counts.markedCorrect + counts.correct + counts.markedWrong + counts.wrong);
-
         return { counts: counts };
     } catch (error) {
         console.log(error);
