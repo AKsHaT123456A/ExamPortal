@@ -22,7 +22,7 @@ const addquestions = async ({ body }, res) => {
     }
 };
 
-cconst getquestions = async (req, res) => {
+const getquestions = async (req, res) => {
     try {
         const data = await Question.find().select('question category options quesId count'); // Select only necessary fields
         if (!data) {
