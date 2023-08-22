@@ -25,7 +25,7 @@ const register = async (req, res) => {
             branch,
             isHosteler,
             studentNo,
-            recaptchaResponse,
+            // recaptchaResponse,
             password,
         });
 

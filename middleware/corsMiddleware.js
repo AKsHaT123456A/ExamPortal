@@ -1,6 +1,6 @@
 const cors = require("cors");
 
-const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000', 'http://127.0.0.1:5500', 'deployed link'];
+const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5175', 'http://localhost:3000', 'http://127.0.0.1:5500', 'deployed link'];
 
 const corsMiddleware = cors({
     origin: (origin, callback) => {

@@ -16,26 +16,18 @@ const userSchema = new mongoose.Schema(
             default: [],
         }],
         password: { type: String, default: "" },
-        totalScore: { type: Number, default: 0 },
-        counts: {
-            markedUnanswered: { type: Number, default: 0 },
-            unanswered: { type: Number, default: 0 },
-            markedCorrect: { type: Number, default: 0 },
-            correct: { type: Number, default: 0 },
-            markedWrong: { type: Number, default: 0 },
-            wrong: { type: Number, default: 0 },
+        logintime: {
+            type: Number,
+            default: 0
         },
-        isRelogin:{
-            type:Boolean,
-            default:false
-        },
-        logintime:{
-            type:Number,
-            default:0
-        }
     },
     { versionKey: false }
 );
+
+userSchema.virtual('calculatedTotalScore').get(function () {
+    return this.responses.reduce((total, response) => total + response.score, 0);
+});
+
 
 const User = mongoose.model("User", userSchema);
 module.exports = User; 

@@ -5,7 +5,7 @@ module.exports.socketSetup = (io) => {
 
     const updateLeaderboardAndEmit = async () => {
         try {
-            leaderboardData = await User.find({}, 'studentNo name totalScore').sort({ totalScore: -1 });
+            leaderboardData = await User.find({}, 'studentNo name calculatedTotalScore').sort({ totalScore: -1 });
             io.emit("leaderboard", leaderboardData);
         } catch (error) {
             console.error(error);

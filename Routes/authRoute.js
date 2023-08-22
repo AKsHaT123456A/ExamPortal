@@ -1,6 +1,7 @@
 // const limiter = require("../utils/limiter");
 
 const register = require("../Controllers/authController");
+const browserOnlyMiddleware = require("../middleware/browserCheckMiddleware");
 
 
 const router = require("express").Router();
