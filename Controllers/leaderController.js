@@ -5,8 +5,7 @@ const getLeaderboardData = async (req, res) => {
         const leaderboardData = await getLeaderboard();
         return res.json(leaderboardData);
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Server error" });
+        return res.status(500).json({ message: "Server error",error:error.message });
     }
 };
 
