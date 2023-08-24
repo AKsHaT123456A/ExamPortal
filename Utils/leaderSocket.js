@@ -5,7 +5,22 @@ module.exports.socketSetup = (io) => {
 
     const updateLeaderboardAndEmit = async () => {
         try {
-            leaderboardData = await User.find({}, 'studentNo name calculatedTotalScore').sort({ totalScore: -1 });
+            // Find all users
+            const users = await User.find().populate('responses').select('studentNo name');
+
+            // Calculate calculatedTotalScore for each user
+            leaderboardData = users.map(user => {
+                const calculatedTotalScore = user.responses.reduce((total, response) => total + response.score, 0);
+                return {
+                    studentNo: user.studentNo,
+                    name: user.name,
+                    calculatedTotalScore: calculatedTotalScore
+                };
+            });
+
+            // Sort by calculatedTotalScore in descending order
+            leaderboardData.sort((a, b) => b.calculatedTotalScore - a.calculatedTotalScore);
+
             io.emit("leaderboard", leaderboardData);
         } catch (error) {
             console.error(error);
@@ -24,5 +39,5 @@ module.exports.socketSetup = (io) => {
     });
 
     // Simulate leaderboard updates every few seconds
-    setInterval(updateLeaderboardAndEmit, 5000);
+    setInterval(updateLeaderboardAndEmit, 10000);
 };

@@ -10,9 +10,10 @@ const { socketSetup } = require("./Utils/leaderSocket");
 const corsMiddleware = require("./middleware/corsMiddleware");
 const logger = require("./middleware/logger");
 require("dotenv").config();
-
+const loadBalancer = require("./Utils/loadBalancer");
 const app = express();
 const server = http.createServer(app);
+// const loadBalancerServer = loadBalancer.createLoadBalancerServer(app);
 const io = socketIO(server);
 const apiPrefix = '/api/v1';
 const authRoute = require("./Routes/authRoute");

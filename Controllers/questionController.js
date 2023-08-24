@@ -24,16 +24,16 @@ const addquestions = async ({ body }, res) => {
 
 const getquestions = async (req, res) => {
     try {
-        const data = await Question.find().select('question category options quesId count'); // Select only necessary fields
-        if (!data) {
-            return res.status(404).json({ success: false, msg: "No questions found" });
-        }
-        return res.status(200).json({ success: true, questions: data });
+        const data = await Question.find({});
+        if (!data) return createError("404", error.message);
+        return res.status(201).json({ success: true, msg: data });
     } catch (error) {
-        console.error("Error fetching questions:", error);
-        return res.status(500).json({ error: "Internal Server Error" });
+        createError("500", error.message);
+        return res.status(error.status || 500).json({ error: { message: error.message || "Internal Server Error" } });
+
     }
 };
+
 
 const deletequestion = async (req, res) => {
     try {
