@@ -17,7 +17,6 @@ const server = http.createServer(app);
 const io = socketIO(server);
 const apiPrefix = '/api/v1';
 const authRoute = require("./Routes/authRoute");
-const leadRoute = require("./Routes/leaderRoute");
 const quesRoute = require("./Routes/quesRoute");
 const resRoute = require("./Routes/resRoute");
 
@@ -43,7 +42,6 @@ socketSetup(io);
 
 // Routes
 app.use(`${apiPrefix}`,authRoute);
-app.use(`${apiPrefix}`,leadRoute);
 app.use(`${apiPrefix}`,quesRoute);
 app.use(`${apiPrefix}`,resRoute);
 
