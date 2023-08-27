@@ -42,11 +42,3 @@ module.exports.socketSetup = (io) => {
     setInterval(updateLeaderboardAndEmit, 10000);
 };
 
-module.exports.getLeaderboard = async(req,res)=>{
-    try {
-        const leaderboardData = await  await User.find().populate('responses').select('studentNo name calculatedTotalScore');
-        return res.json(leaderboardData);
-    } catch (error) {
-        return res.status(500).json({ message: "Server error",error:error.message });
-    }
-}

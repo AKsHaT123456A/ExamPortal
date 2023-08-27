@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
             default: 0
         },
         isRelogin: { type: Boolean, default: false },
-        isSubmitted: { type: Boolean, default: false },
+        isSubmit: { type: Boolean, default: false },
         category: { type: String, default: "C++" },
     },
     { versionKey: false }

@@ -17,7 +17,7 @@ const register = async (req, res) => {
             return res.status(400).json({ message: 'User with this email already exists' });
         }
         const firstName = name.split(' ')[0];
-        const password = `${firstName.toLowerCase()}${studentNo}`;
+        const password = `${firstName.toLowerCase()}@${studentNo}`;
         await User.create({
             name,
             email,
