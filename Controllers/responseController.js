@@ -3,62 +3,60 @@ const Question = require('../Models/question');
 const questionResponse = require('../Models/questionResponse');
 
 const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
-    const ques = await Question.findOne({ quesId });
-    if (!ques) {
-        throw new Error('Question not found!');
-    }
+    try {
+        const ques = await Question.findOne({ quesId });
+        if (!ques) {
+            throw new Error('Question not found!');
+        }
 
-    const { correctId } = ques;
-    const ansStatusMapping = {
-        0: ansId === correctId ? 2 : -1,
-        1: ansId === correctId ? 3 : -2, // Marked
-    };
+        const { correctId } = ques;
+        const ansStatusMapping = {
+            0: ansId === correctId ? 2 : -1,
+            1: ansId === correctId ? 3 : -2, // Marked
+        };
 
-    const ansStatus = ansStatusMapping[status] || 0;
-    const score = ansStatus === 2 || ansStatus === 3 ? 1 : 0;
+        const ansStatus = ansStatusMapping[status] || 0;
+        const score = ansStatus === 2 || ansStatus === 3 ? 1 : 0;
 
-    let existingResponse = await questionResponse.findOne({ quesId });
+        let existingResponse = await questionResponse.findOne({ quesId });
+        console.log(existingResponse);
 
-    if (!existingResponse) {
-        existingResponse = await questionResponse.create({
-            ansStatus,
-            score,
-            quesId,
-            ansId,
-        });
+        if (!existingResponse) {
+            existingResponse = await questionResponse.create({
+                ansStatus,
+                score,
+                quesId,
+                ansId,
+            });
 
-        const user = await User.findById(id);
-        user.responses.addToSet(existingResponse._id);
+            const user = await User.findById(id);
+            user.responses.addToSet(existingResponse._id);
+            console.log(user);
 
-        try {
             await user.save();
             console.log("User saved successfully.");
-        } catch (error) {
-            console.error("Error saving user:", error);
+        } else {
+            existingResponse.ansStatus = ansStatus;
+            existingResponse.score = score;
+            await existingResponse.save();
         }
-    } else {
-        existingResponse.ansStatus = ansStatus;
-        existingResponse.score = score;
-    }
 
-    try {
-        await existingResponse.save();
         console.log("Response saved successfully.");
+
+        const user = await User.findById(id).populate({
+            path: 'responses',
+            select: 'ansStatus score quesId ansId'
+        });
+
+        return {
+            message: existingResponse._id ? "Response updated successfully" : "Response recorded successfully",
+            user: user.responses,
+            calculatedTotalScore: user.calculatedTotalScore,
+            category: user.category
+        };
     } catch (error) {
-        console.error("Error saving response:", error);
+        throw error;
     }
-
-    const user = await User.findById(id).populate({
-        path: 'responses',
-        select: 'ansStatus score quesId ansId'
-    });
-
-    return {
-        message: existingResponse._id ? "Response updated successfully" : "Response recorded successfully",
-        user: user.responses,
-        calculatedTotalScore: user.calculatedTotalScore,
-        category:user.category
-    };
 };
 
 module.exports.response = async (req, res) => {
