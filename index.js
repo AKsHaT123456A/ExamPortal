@@ -3,14 +3,11 @@ const http = require('http');
 const helmet = require('helmet');
 const compression = require('compression');
 const socketIO = require('socket.io');
-const cors = require('cors');
 const constants = require("./Connections/constants");
 const connectDB = require("./Connections/db");
 const { socketSetup } = require("./Utils/leaderSocket");
 const corsMiddleware = require("./middleware/corsMiddleware");
-const logger = require("./middleware/logger");
 require("dotenv").config();
-const cluster = require('cluster');
 
 // Create an Express app
 const app = express();
@@ -28,25 +25,6 @@ const apiPrefix = '/api/v1';
 const authRoute = require("./Routes/authRoute");
 const quesRoute = require("./Routes/quesRoute");
 const resRoute = require("./Routes/resRoute");
-
-// Check the number of available CPUs
-const numCPUs = require('os').cpus().length;
-
-// For Master process
-if (cluster.isMaster) {
-  console.log(`Master ${process.pid} is running`);
-
-  // Fork workers
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
-
-  // Handle worker exit
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`worker ${worker.process.pid} died`);
-  });
-} else {
-  // For Worker
 
   // Database connection
   connectDB();
@@ -82,6 +60,6 @@ if (cluster.isMaster) {
 
   // Start the server
   server.listen(constants.PORT, () => {
-    console.log(`Worker ${process.pid} started. Server running at port ${constants.PORT}`);
+    console.log(` Server running at port ${constants.PORT}`);
   });
-}
+
