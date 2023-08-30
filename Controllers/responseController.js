@@ -31,14 +31,24 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
 
             const user = await User.findById(id);
             user.responses.addToSet(existingResponse._id);
+            user.calculatedTotalScore += score; // Update total score
+            user.category = ques.category; // Update category
             console.log(user);
 
             await user.save();
             console.log("User saved successfully.");
         } else {
-            existingResponse.ansStatus = ansStatus;
+            const user = await User.findById(id);
+
+            // Calculate score change and update total score
+            const oldScore = existingResponse.score;
+            const scoreChange = score - oldScore;
             existingResponse.score = score;
-            await existingResponse.save();
+
+            user.calculatedTotalScore += scoreChange;
+            console.log(user);
+
+            await Promise.all([existingResponse.save(), user.save()]);
         }
 
         console.log("Response saved successfully.");

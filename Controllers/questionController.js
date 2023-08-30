@@ -1,12 +1,13 @@
 const Question = require("../Models/question");
+
 const addquestions = async ({ body }, res) => {
     try {
         const responseData = body;
         const quesId = responseData.quesId;
 
-        const ques = await Question.findOne({ quesId });
+        const quesExists = await Question.exists({ quesId });
 
-        if (ques) {
+        if (quesExists) {
             return res.status(409).json({ success: false, msg: "Question already exists" });
         }
 
@@ -24,89 +25,97 @@ const addquestions = async ({ body }, res) => {
 
 const getquestions = async (req, res) => {
     try {
-        const data = await Question.find({});
-        if (!data) return createError("404", error.message);
-        return res.status(201).json({ success: true, msg: data });
+        const data = await Question.find({}, { _id: 0, __v: 0 });
+        if (!data) return res.status(404).json({ success: false, msg: "No questions found" });
+        return res.status(200).json({ success: true, msg: data });
     } catch (error) {
-        createError("500", error.message);
         return res.status(error.status || 500).json({ error: { message: error.message || "Internal Server Error" } });
-
     }
 };
-
 
 const deletequestion = async (req, res) => {
     try {
-        let data = await Question.findByIdAndDelete(req.params.id);
-        if (!data) return createError("404", error.message);
+        const data = await Question.findByIdAndDelete(req.params.id);
+        if (!data) return res.status(404).json({ success: false, msg: "Question not found" });
         return res.status(204).json({ msg: "Question has been deleted" });
     } catch (error) {
-        createError.createErrorHandler("500", error.message);
         return res.status(error.status || 500).json({ error: { message: error.message || "Internal Server Error" } });
-
     }
 };
+
 const updatequestion = async (req, res) => {
     try {
         const updatedData = await Question.findByIdAndUpdate(req.params.id, req.body, {
-            new: true, // Return the updated document
+            new: true,
         });
 
         if (!updatedData) {
             return res.status(404).json({ success: false, msg: "Question not found" });
         }
 
-        const { correctId, ...info } = updatedData.toObject(); // Convert to object to remove Mongoose methods
+        const { correctId, ...info } = updatedData.toObject();
 
         return res.status(200).json({ success: true, msg: info });
     } catch (error) {
-        // Handle errors properly
-        console.error(error); // Log the error for debugging purposes
-
-        // Create an error handler instance
-        const errorHandler = createError(500, error.message || "Internal Server Error");
-
+        console.error(error);
         return res.status(errorHandler.status).json({
             error: { message: errorHandler.message },
         });
     }
 };
+
 const categoryquestion = async (req, res) => {
     try {
-        let data = await Question.find({ category: req.params.key });
-        if (!data) return createError("404", error.message);
-        const { correctId, ...info } = data;
-        return res.status(200).json({ success: true, msg: info });
-    } catch (error) {
-        createError.createErrorHandler("500", error.message);
-        return res.status(error.status || 500).json({ error: { message: error.message || "Internal Server Error" } });
+        const data = await Question.find({ category: req.params.key }, { _id: 0, __v: 0 });
+        if (!data || data.length === 0) {
+            return res.status(404).json({ success: false, msg: "Question not found" });
+        }
 
+        const formattedData = data.map((item) => {
+            const { question, options } = item;
+            return { question, options };
+        });
+
+        return res.status(200).json({
+            success: true,
+            msg: formattedData,
+        });
+    } catch (error) {
+        const errorMessage = error.message || "Internal Server Error";
+        const statusCode = error.status || 500;
+
+        return res.status(statusCode).json({
+            error: { message: errorMessage },
+        });
     }
 };
+
 const searchquestion = async (req, res) => {
     try {
-        let data = await Question.find({
+        const data = await Question.find({
             $or: [{ question: { $regex: req.params.key } }],
-        });
-        if (!data) return createError("404", error.message);
-        const { correctId, ...info } = data;
-        return res.status(200).json({ success: true, msg: info });
+        }, { _id: 0, __v: 0 });
+
+        if (!data || data.length === 0) {
+            return res.status(404).json({ success: false, msg: "Question not found" });
+        }
+
+        return res.status(200).json({ success: true, msg: data });
     } catch (error) {
-        createError.createErrorHandler("500", error.message);
         return res.status(error.status || 500).json({ error: { message: error.message || "Internal Server Error" } });
     }
 };
+
 const countQuestion = async (req, res) => {
     try {
         const category = req.query.category;
-        const categoryResponse = await Question.find({ category });
-        return res.status(200).json({ success: true, msg: { categoryResponse } });
-
+        const categoryCount = await Question.countDocuments({ category });
+        return res.status(200).json({ success: true, msg: { categoryCount } });
     } catch (error) {
         return res.status(error.status || 500).json({ error: { message: error.message || "Internal Server Error" } });
-
     }
-}
+};
+
 module.exports = {
     addquestions,
     getquestions,
@@ -114,5 +123,5 @@ module.exports = {
     updatequestion,
     categoryquestion,
     searchquestion,
-    countQuestion
+    countQuestion,
 };
