@@ -19,7 +19,6 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
         const score = ansStatus === 2 || ansStatus === 3 ? 1 : 0;
 
         let existingResponse = await questionResponse.findOne({ quesId });
-        console.log(existingResponse);
 
         if (!existingResponse) {
             existingResponse = await questionResponse.create({
@@ -33,10 +32,7 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
             user.responses.addToSet(existingResponse._id);
             user.calculatedTotalScore += score; // Update total score
             user.category = ques.category; // Update category
-            console.log(user);
-
             await user.save();
-            console.log("User saved successfully.");
         } else {
             const user = await User.findById(id);
 
@@ -46,23 +42,19 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
             existingResponse.score = score;
 
             user.calculatedTotalScore += scoreChange;
-            console.log(user);
-
             await Promise.all([existingResponse.save(), user.save()]);
         }
 
-        console.log("Response saved successfully.");
-
-        const user = await User.findById(id).populate({
+        const userWithResponses = await User.findById(id).populate({
             path: 'responses',
-            select: 'ansStatus score quesId ansId'
+            select: 'ansStatus score quesId ansId -_id'
         });
 
         return {
             message: existingResponse._id ? "Response updated successfully" : "Response recorded successfully",
-            user: user.responses,
-            calculatedTotalScore: user.calculatedTotalScore,
-            category: user.category
+            user: userWithResponses.responses,
+            calculatedTotalScore: userWithResponses.calculatedTotalScore,
+            category: userWithResponses.category
         };
     } catch (error) {
         throw error;
@@ -76,6 +68,19 @@ module.exports.response = async (req, res) => {
         const response = await fetchResponseFromDatabase(id, status, quesId, ansId);
 
         return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({ error: "Internal Server Error", message: error.message });
+    }
+};
+
+module.exports.userResponse = async (req, res) => {
+    const { id } = req.query;
+    try {
+        const user = await User.findById(id).populate({
+            path: 'responses',
+            select: 'ansStatus score quesId ansId -_id'
+        });
+        return res.status(200).json({ responses: user.responses });
     } catch (error) {
         return res.status(500).json({ error: "Internal Server Error", message: error.message });
     }
