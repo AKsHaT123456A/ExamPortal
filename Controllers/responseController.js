@@ -26,6 +26,7 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
                 score,
                 quesId,
                 ansId,
+                category: ques.category
             });
 
             const user = await User.findById(id);
@@ -47,7 +48,7 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
 
         const userWithResponses = await User.findById(id).populate({
             path: 'responses',
-            select: 'ansStatus score quesId ansId -_id'
+            select: 'ansStatus score quesId ansId category -_id'
         });
 
         return {
