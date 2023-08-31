@@ -45,7 +45,9 @@ const deletequestion = async (req, res) => {
 
 const updatequestion = async (req, res) => {
     try {
-        const updatedData = await Question.findAndUpdate({ quesId: req.params.id }, req.body);
+        const updatedData = await Question.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+        });
 
         if (!updatedData) {
             return res.status(404).json({ success: false, msg: "Question not found" });
@@ -55,10 +57,10 @@ const updatequestion = async (req, res) => {
 
         return res.status(200).json({ success: true, msg: info });
     } catch (error) {
-        console.error(error);
-        throw err;
+        throw error;
+        // console.error(error);
         // return res.status(errorHandler.status).json({
-            // error: { message: errorHandler.message },
+        //     error: { message: errorHandler.message },
         // });
     }
 };
