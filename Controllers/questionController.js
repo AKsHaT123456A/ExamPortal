@@ -56,9 +56,10 @@ const updatequestion = async (req, res) => {
         return res.status(200).json({ success: true, msg: info });
     } catch (error) {
         console.error(error);
-        return res.status(errorHandler.status).json({
-            error: { message: errorHandler.message },
-        });
+        throw err;
+        // return res.status(errorHandler.status).json({
+            // error: { message: errorHandler.message },
+        // });
     }
 };
 
