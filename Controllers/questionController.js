@@ -45,9 +45,7 @@ const deletequestion = async (req, res) => {
 
 const updatequestion = async (req, res) => {
     try {
-        const updatedData = await Question.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-        });
+        const updatedData = await Question.findOneAndUpdate({quesId:req.params.id}, req.body);
 
         if (!updatedData) {
             return res.status(404).json({ success: false, msg: "Question not found" });
