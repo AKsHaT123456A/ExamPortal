@@ -17,20 +17,25 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
 
         const ansStatus = ansStatusMapping[status] || 0;
         const score = ansStatus === 2 || ansStatus === 3 ? 1 : 0;
-
-        let existingResponse = await questionResponse.findOne({ quesId });
-
+        console.log(ansStatus);
+        const userId = id;
+        let existingResponse = await questionResponse.findOne({ quesId, userId });
+        console.log(existingResponse);
         if (!existingResponse) {
             existingResponse = await questionResponse.create({
                 ansStatus,
                 score,
                 quesId,
                 ansId,
-                category: ques.category
+                category: ques.category,
+                userId
             });
 
             const user = await User.findById(id);
+            console.log(existingResponse._id);
             user.responses.addToSet(existingResponse._id);
+            console.log(user.responses)
+
             user.calculatedTotalScore += score; // Update total score
             user.category = ques.category; // Update category
             await user.save();
@@ -41,7 +46,7 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
             const oldScore = existingResponse.score;
             const scoreChange = score - oldScore;
             existingResponse.score = score;
-
+            existingResponse.ansStatus = ansStatus;
             user.calculatedTotalScore += scoreChange;
             await Promise.all([existingResponse.save(), user.save()]);
         }
