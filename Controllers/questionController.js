@@ -51,7 +51,7 @@ const updatequestion = async (req, res) => {
             return res.status(404).json({ success: false, msg: "Question not found" });
         }
 
-        const { _id,correctId, ...info } = updatedData.toObject();
+        const { _id, correctId, ...info } = updatedData.toObject();
 
         return res.status(200).json({ success: true, msg: info });
     } catch (error) {
@@ -67,8 +67,8 @@ const categoryquestion = async (req, res) => {
         }
 
         const formattedData = data.map((item) => {
-            const { question, options } = item;
-            return { question, options };
+            const { question, options, category } = item;
+            return { question, options ,category};
         });
 
         return res.status(200).json({
