@@ -1,4 +1,4 @@
-const User = require("../Models/user");
+const { User } = require("../Models/user");
 
 module.exports.socketSetup = (io) => {
     let leaderboardData = []; // Initialize leaderboard data

@@ -1,4 +1,5 @@
 const Question = require("../Models/question");
+const CryptoJS = require("crypto-js");
 
 const addquestions = async ({ body }, res) => {
     try {
@@ -22,6 +23,7 @@ const addquestions = async ({ body }, res) => {
         return res.status(error.status || 500).json({ error: { message: error.message || "Internal Server Error" } });
     }
 };
+
 
 const getquestions = async (req, res) => {
     try {
@@ -68,7 +70,7 @@ const categoryquestion = async (req, res) => {
 
         const formattedData = data.map((item) => {
             const { question, options, quesId } = item;
-            return { question, options ,quesId};
+            return { question, options, quesId };
         });
 
         return res.status(200).json({
@@ -85,21 +87,6 @@ const categoryquestion = async (req, res) => {
     }
 };
 
-const searchquestion = async (req, res) => {
-    try {
-        const data = await Question.find({
-            $or: [{ question: { $regex: req.params.key } }],
-        }, { _id: 0, __v: 0 });
-
-        if (!data || data.length === 0) {
-            return res.status(404).json({ success: false, msg: "Question not found" });
-        }
-
-        return res.status(200).json({ success: true, msg: data });
-    } catch (error) {
-        return res.status(error.status || 500).json({ error: { message: error.message || "Internal Server Error" } });
-    }
-};
 
 const countQuestion = async (req, res) => {
     try {
@@ -117,6 +104,5 @@ module.exports = {
     deletequestion,
     updatequestion,
     categoryquestion,
-    searchquestion,
     countQuestion,
 };

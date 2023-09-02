@@ -6,7 +6,6 @@ const {
     deletequestion,
     updatequestion,
     categoryquestion,
-    searchquestion,
     countQuestion,
 } = require("../Controllers/questionController");
 
@@ -14,7 +13,6 @@ router.post("/addquestions", addquestions);
 router.get("/getquestions", getquestions);
 router.delete("/:id", deletequestion);
 router.patch("/updatequestion/:id", updatequestion);
-router.get("/search/:key", searchquestion);
 router.get("/category/:key", categoryquestion);
 router.get("/counts", countQuestion);
 
