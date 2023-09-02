@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const connectDB = async () => {
     mongoose
         .connect(
-            process.env.DATABASE_KEY,
+            "mongodb+srv://root:root@cluster0.2cvrool.mongodb.net/?retryWrites=true&w=majority",
             { useNewUrlParser: true }
         )
         .then(() => {
