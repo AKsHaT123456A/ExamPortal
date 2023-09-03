@@ -38,7 +38,6 @@ const resRoute = require("./Routes/resRoute");
   app.use(express.urlencoded({ extended: false }));
   app.use(helmet());
   app.use(compression());
-
   // Content Security Policy middleware using Helmet
   app.use(
     helmet.contentSecurityPolicy()

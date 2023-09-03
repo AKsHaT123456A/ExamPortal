@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 const { User, validateUser } = require("../Models/user");
 const constants = require("../Connections/constants");
-const CryptoJS = require("crypto-js"); 
+const CryptoJS = require("crypto-js");
 
- 
+
 
 const register = async (req, res) => {
   try {
@@ -22,13 +22,11 @@ const register = async (req, res) => {
       mobileNo,
     } = decryptedData;
 
-    // Continue with the rest of your registration code here...
-
     // Generate a secure password with the first letter capitalized
     const firstName = name.split(" ")[0];
     const capitalizedFirstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
     const password = `${capitalizedFirstName}@${studentNo}`;
-    
+
     // Create the user
     const newUser = await User.create({
       name,
@@ -40,7 +38,20 @@ const register = async (req, res) => {
       password,
       mobileNo,
     });
-
+    const recaptchaResponse = await axios.post(
+      "https://www.google.com/recaptcha/api/siteverify",
+      null,
+      {
+        params: {
+          secret: constants.RECAPTCHA_SECRET_KEY,
+          response: token,
+        },
+      }
+    );
+    console.log(recaptchaResponse.data);
+    if (!recaptchaResponse.data.success) {
+      return res.status(400).json({ message: "reCAPTCHA verification failed" });
+    }
     const payload = {
       _id: newUser._id,
       name: newUser.name,
