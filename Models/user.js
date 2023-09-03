@@ -4,7 +4,7 @@ const userValidationSchema = require("../validators/userValidationSchema");
 const userSchema = new mongoose.Schema(
     {
         email: { type: String, index: true }, // Adding index to 'email' field
-        gender: { type: String,enum:['FEMALE','MALE'] },
+        gender: { type: String,enum:['Female','Male'] },
         isHosteler: { type: Boolean, default: false },
         isVerified: { type: Boolean, default: false },
         name: { type: String, trim: true },
