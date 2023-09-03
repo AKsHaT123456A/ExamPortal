@@ -51,7 +51,7 @@ const deletequestion = async (req, res) => {
 
 const updatequestion = async (req, res) => {
     try {
-        const updatedData = await Question.findOneAndUpdate({ quesId: req.params.id }, { $set: req.body });
+        const updatedData = await Question.findByIdAndUpdate(req.params.id, { $set: req.body });
 
         if (!updatedData) {
             return res.status(404).json({ success: false, msg: "Question not found" });
@@ -73,8 +73,8 @@ const categoryquestion = async (req, res) => {
         }
 
         const formattedData = data.map((item) => {
-            const { question, options, quesId ,ansId , correctId, _id} = item;
-            return { question, options ,quesId , ansId , correctId ,_id};
+            const { question, options, quesId, ansId, correctId, _id } = item;
+            return { question, options, quesId, ansId, correctId, _id };
         });
 
         return res.status(200).json({
