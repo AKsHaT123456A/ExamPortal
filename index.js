@@ -48,6 +48,12 @@ const resRoute = require("./Routes/resRoute");
   socketSetup(io);
 
   // Routes
+  app.use(express.static("public"));
+
+  // Define your route to render the "index" template
+  app.get("/", (req, res) => {
+    res.render("index"); // Assuming you have a template engine configured
+  });
   app.use(`${apiPrefix}`, authRoute);
   app.use(`${apiPrefix}`, quesRoute);
   app.use(`${apiPrefix}`, resRoute);

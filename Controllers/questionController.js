@@ -73,8 +73,8 @@ const categoryquestion = async (req, res) => {
         }
 
         const formattedData = data.map((item) => {
-            const { question, options, quesId ,ansId , correctId} = item;
-            return { question, options ,quesId , ansId , correctId};
+            const { question, options, quesId ,ansId , correctId, _id} = item;
+            return { question, options ,quesId , ansId , correctId ,_id};
         });
 
         return res.status(200).json({
