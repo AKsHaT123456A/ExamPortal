@@ -1,9 +1,17 @@
 const jwt = require("jsonwebtoken");
 const { User, validateUser } = require("../Models/user");
 const constants = require("../Connections/constants");
+const CryptoJS = require("crypto-js"); 
+
+ 
+
 const register = async (req, res) => {
   try {
-    // Validate and sanitize input data
+    // Decrypt the request body
+    const encryptedData = req.body.encryptedData;
+    const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, constants.CRYPTO_SECRET_KEY);
+    const decryptedData = JSON.parse(decryptedBytes.toString(CryptoJS.enc.Utf8));
+
     const {
       name,
       email,
@@ -11,58 +19,42 @@ const register = async (req, res) => {
       gender,
       isHosteler,
       studentNo,
-    //   recaptchaResponse,
-    } = req.body;
-    const validationResult = await validateUser(req.body);
-    // ReCAPTCHA verification logic goes here
-    // const isRecaptchaValid = await recaptchaVerification.verify(recaptchaResponse);
-    // if (!isRecaptchaValid) {
-    //     return res.status(400).json({ message: 'ReCAPTCHA verification failed' });
-    // }
-    if (validationResult.error) {
-      return res
-        .status(400)
-        .json({
-          error: "Validation failed",
-          details: validationResult.error.details,
-        });
-    }
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ message: "User with this email already exists" });
-    }
+      mobileNo,
+    } = decryptedData;
+
+    // Continue with the rest of your registration code here...
+
+    // Generate a secure password with the first letter capitalized
     const firstName = name.split(" ")[0];
-    const password = `${firstName.toLowerCase()}@${studentNo}`;
-    await User.create({
+    const capitalizedFirstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+    const password = `${capitalizedFirstName}@${studentNo}`;
+    
+    // Create the user
+    const newUser = await User.create({
       name,
       email,
       gender,
       branch,
       isHosteler,
       studentNo,
-      // recaptchaResponse,
       password,
+      mobileNo,
     });
 
-    // Assuming registration is successful, generate JWT token
     const payload = {
-      name,
-      email,
-      studentNo,
+      _id: newUser._id,
+      name: newUser.name,
+      email: newUser.email,
     };
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-      expiresIn: "2h",
+    const token = jwt.sign(payload, constants.JWT_SECRET_KEY, {
+      expiresIn: "10d",
     });
 
-    // Return the token to the client
     res.status(201).json({ message: "Registered", token });
   } catch (err) {
-    // Handle registration error
     console.error(err);
-    res.status(500).json({ message: "Registration failed", error: err.stack });
+    res.status(500).json({ message: "Registration failed", error: err.message });
   }
 };
 

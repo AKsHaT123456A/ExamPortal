@@ -1,16 +1,21 @@
 const Joi = require('@hapi/joi');
 
 const userValidationSchema = Joi.object({
-  email: Joi.string().regex(/^([a-zA-Z]){2,15}[2][12](([x]{3})|[0-9]{2,3})([0-9]){3}(-d)?@akgec.ac.in$/).required(),
+  email: Joi.string().email().required(),
   mobileNo: Joi.string().regex(/^[6-9]([0-9]){9}$/).required(),
-  gender: Joi.string(),
+  gender: Joi.string().valid('Female', 'Male'),
   isHosteler: Joi.boolean(),
-  isVerfied: Joi.boolean(),
-  name: Joi.string().regex(/^[a-zA-Z]{2,15}(\s[a-zA-Z.]{1,10})?(\s[a-zA-Z]{2,10})?(\s[a-zA-Z]{2,10})?$/).required(),
-  studentNo: Joi.string().pattern(/^[2][12](([x]{3})|[0-9]{2,3})([0-9]){3}(-d)?$/).required(),
-  branch: Joi.string(),
-  responses: Joi.string(), 
+  isVerified: Joi.boolean(),
+  name: Joi.string().regex(/^[a-zA-Z]+(?: [a-zA-Z.]+){0,2}$/).required(),
+  studentNo: Joi.string().pattern(/^(22[1-3]\d{6}|2215\d{5})-?d?$/).required(),
+  branch: Joi.string().valid('IT', 'CSE', 'CSEAIML', 'AIML', 'CS', 'EN', 'ECE', 'MECHANICAL', 'CSEDS', 'CSIT', 'CIVIL'),
+  responses: Joi.array().items(Joi.string()),
+  password: Joi.string().min(6).required(),
+  logintime: Joi.number(),
+  isRelogin: Joi.boolean(),
+  isSubmit: Joi.boolean(),
+  category: Joi.string(),
   score: Joi.number(),
-});
+}).prefs({ convert: false }); 
 
 module.exports = userValidationSchema;
