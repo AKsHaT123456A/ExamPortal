@@ -24,14 +24,18 @@ const addquestions = async ({ body }, res) => {
     }
 };
 
-
 const getquestions = async (req, res) => {
     try {
         const data = await Question.find({}, { _id: 0, __v: 0 });
-        if (!data) return res.status(404).json({ success: false, msg: "No questions found" });
+
+        if (!data || data.length === 0) {
+            return res.status(404).json({ success: false, msg: "No questions found" });
+        }
+
         return res.status(200).json({ success: true, msg: data });
     } catch (error) {
-        return res.status(error.status || 500).json({ error: { message: error.message || "Internal Server Error" } });
+        console.error(error); // Log the error for debugging
+        return res.status(500).json({ error: { message: "Internal Server Error" } });
     }
 };
 
@@ -70,7 +74,7 @@ const categoryquestion = async (req, res) => {
 
         const formattedData = data.map((item) => {
             const { question, options, quesId } = item;
-            return { question, options, quesId };
+            return { question, options ,quesId};
         });
 
         return res.status(200).json({

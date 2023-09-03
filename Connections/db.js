@@ -1,8 +1,10 @@
+
 const mongoose = require("mongoose");
+const constants = require("./constants");
 const connectDB = async () => {
     mongoose
         .connect(
-            "mongodb+srv://root:root@cluster0.2cvrool.mongodb.net/?retryWrites=true&w=majority",
+            process.env.DATABASE_KEY || constants.DATABASE_KEY,
             { useNewUrlParser: true }
         )
         .then(() => {
