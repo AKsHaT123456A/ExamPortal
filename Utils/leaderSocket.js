@@ -3,7 +3,7 @@ const { User } = require("../Models/user");
 module.exports.socketSetup = (io) => {
     let leaderboardData = []; // Initialize leaderboard data
 
-    const updateLeaderboardAndEmit = async () => {
+    const updateLeaderboardAndEmit = async (page = 1, itemsPerPage = 10) => {
         try {
             // Find all users
             const users = await User.find().populate('responses').select('studentNo name');
@@ -21,7 +21,13 @@ module.exports.socketSetup = (io) => {
             // Sort by calculatedTotalScore in descending order
             leaderboardData.sort((a, b) => b.calculatedTotalScore - a.calculatedTotalScore);
 
-            io.emit("leaderboard", leaderboardData);
+            // Calculate start and end indices for pagination
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+
+            const pageData = leaderboardData.slice(startIndex, endIndex);
+
+            io.emit("leaderboard", pageData);
         } catch (error) {
             console.error(error);
         }
@@ -30,8 +36,11 @@ module.exports.socketSetup = (io) => {
     io.on("connection", (socket) => {
         console.log("A user connected");
 
-        // Send initial leaderboard data to the client
         socket.emit("leaderboard", leaderboardData);
+
+        socket.on("page", (page, itemsPerPage) => {
+            updateLeaderboardAndEmit(page, itemsPerPage);
+        });
 
         socket.on("disconnect", () => {
             console.log("A user disconnected");
@@ -41,4 +50,3 @@ module.exports.socketSetup = (io) => {
     // Simulate leaderboard updates every few seconds
     setInterval(updateLeaderboardAndEmit, 10000);
 };
-
