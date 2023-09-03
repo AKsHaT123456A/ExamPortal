@@ -11,7 +11,7 @@ const {
 
 router.post("/addquestions", addquestions);
 router.get("/getquestions", getquestions);
-router.delete("/:id", deletequestion);
+router.delete("/deletequestions/:id", deletequestion);
 router.patch("/updatequestion/:id", updatequestion);
 router.get("/category/:key", categoryquestion);
 router.get("/counts", countQuestion);
