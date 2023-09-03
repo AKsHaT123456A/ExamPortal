@@ -1,5 +1,4 @@
 const Question = require("../Models/question");
-const CryptoJS = require("crypto-js");
 
 const addquestions = async ({ body }, res) => {
     try {
@@ -62,12 +61,11 @@ const updatequestion = async (req, res) => {
         return res.status(200).json({ success: true, msg: info });
     } catch (error) {
         throw error;
-        // Handle the error properly, log or return an error response
     }
 };
 const categoryquestion = async (req, res) => {
     try {
-        const data = await Question.find({ category: req.params.key }, { _id: 0, __v: 0 });
+        const data = await Question.find({ category: req.params.key }, { __v: 0 });
         if (!data || data.length === 0) {
             return res.status(404).json({ success: false, msg: "Question not found" });
         }
