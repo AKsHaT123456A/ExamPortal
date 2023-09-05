@@ -1,7 +1,6 @@
 const { User } = require('../Models/user');
 const Question = require('../Models/question');
 const questionResponse = require('../Models/questionResponse');
-const CryptoJS = require("crypto-js");
 const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
     try {
         const ques = await Question.findOne({ quesId });
