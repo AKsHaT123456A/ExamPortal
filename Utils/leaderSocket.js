@@ -2,8 +2,10 @@ const { User } = require("../Models/user");
 
 module.exports.socketSetup = (io) => {
     let leaderboardData = []; // Initialize leaderboard data
+    let currentPage = 1;
+    const itemsPerPage = 2; // Show 10 records per page
 
-    const updateLeaderboardAndEmit = async (page = 1, itemsPerPage = 10) => {
+    const updateLeaderboardAndEmit = async () => {
         try {
             // Find all users
             const users = await User.find().populate('responses').select('studentNo name');
@@ -20,17 +22,17 @@ module.exports.socketSetup = (io) => {
 
             // Sort by calculatedTotalScore in descending order
             leaderboardData.sort((a, b) => b.calculatedTotalScore - a.calculatedTotalScore);
-
-            // Calculate start and end indices for pagination
-            const startIndex = (page - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-
-            const pageData = leaderboardData.slice(startIndex, endIndex);
-
-            io.emit("leaderboard", pageData);
         } catch (error) {
             console.error(error);
         }
+    };
+
+    const sendPageData = () => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const pageData = leaderboardData.slice(startIndex, endIndex);
+
+        io.emit("leaderboard", pageData);
     };
 
     io.on("connection", (socket) => {
@@ -38,8 +40,9 @@ module.exports.socketSetup = (io) => {
 
         socket.emit("leaderboard", leaderboardData);
 
-        socket.on("page", (page, itemsPerPage) => {
-            updateLeaderboardAndEmit(page, itemsPerPage);
+        socket.on("page", (page) => {
+            currentPage = page;
+            sendPageData();
         });
 
         socket.on("disconnect", () => {
@@ -48,5 +51,12 @@ module.exports.socketSetup = (io) => {
     });
 
     // Simulate leaderboard updates every few seconds
-    setInterval(updateLeaderboardAndEmit, 10000);
+    setInterval(() => {
+        updateLeaderboardAndEmit();
+        sendPageData(); // Send the current page data after updating the leaderboard
+    }, 10000);
+
+    // Initial leaderboard and page data setup
+    updateLeaderboardAndEmit();
+    sendPageData();
 };
