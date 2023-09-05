@@ -27,7 +27,8 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
                 quesId,
                 ansId,
                 category: ques.category,
-                userId
+                userId,
+                isVisited: true
             });
 
             const user = await User.findById(id);
@@ -46,6 +47,7 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
             const scoreChange = score - oldScore;
             existingResponse.score = score;
             existingResponse.ansStatus = ansStatus;
+            existingResponse.isVisited = true;
             user.calculatedTotalScore += scoreChange;
             await Promise.all([existingResponse.save(), user.save()]);
         }
