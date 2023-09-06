@@ -1,6 +1,7 @@
 const { User } = require('../Models/user');
 const Question = require('../Models/question');
 const questionResponse = require('../Models/questionResponse');
+const CryptoJS = require("crypto-js");
 const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
     try {
         const ques = await Question.findOne({ quesId });
@@ -27,8 +28,7 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
                 quesId,
                 ansId,
                 category: ques.category,
-                userId,
-                isVisited: true
+                userId
             });
 
             const user = await User.findById(id);
@@ -47,7 +47,6 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
             const scoreChange = score - oldScore;
             existingResponse.score = score;
             existingResponse.ansStatus = ansStatus;
-            existingResponse.isVisited = true;
             user.calculatedTotalScore += scoreChange;
             await Promise.all([existingResponse.save(), user.save()]);
         }
@@ -92,3 +91,22 @@ module.exports.userResponse = async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error", message: error.message });
     }
 };
+
+module.exports.isVisited = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const user = await User.findById(id);
+        console.log(user);
+        const questionPromises = user.responses.map(async (response) => {
+            const question = await questionResponse.findById(response).select('isVisited quesId category -_id');
+            return question;
+        });
+
+        const questions = await Promise.all(questionPromises);
+
+        return res.status(200).json({ questions }); return res.status(200).json({ isVisitedResponses });
+
+    } catch (error) {
+        throw error
+    }
+}
