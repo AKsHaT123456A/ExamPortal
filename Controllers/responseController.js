@@ -1,7 +1,7 @@
 const { User } = require('../Models/user');
 const Question = require('../Models/question');
 const questionResponse = require('../Models/questionResponse');
-const CryptoJS = require("crypto-js");
+const visited = require('../Models/visited');
 const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
     try {
         const ques = await Question.findOne({ quesId });
@@ -94,19 +94,23 @@ module.exports.userResponse = async (req, res) => {
 
 module.exports.isVisited = async (req, res) => {
     const { id } = req.params;
+    const { category, quesId } = req.query;
+
     try {
-        const user = await User.findById(id);
-        console.log(user);
-        const questionPromises = user.responses.map(async (response) => {
-            const question = await questionResponse.findById(response).select('isVisited quesId category -_id');
-            return question;
-        });
+        const foundVisited = await visited.findOne({ userId: id, category, quesId, isVisited: true });
+        if (foundVisited) return res.status(400).json({ "message": "Already visited" });
+        const [createdVisit, foundVisit] = await Promise.all([
+            visited.create({ userId: id, category, quesId, isVisited: true }),
+            visited.find({ userId: id, isVisited: true })
+        ]);
 
-        const questions = await Promise.all(questionPromises);
-
-        return res.status(200).json({ questions }); return res.status(200).json({ isVisitedResponses });
-
+        if (foundVisit) {
+            res.status(200).json(foundVisit);
+        } else {
+            res.status(404).json({ message: 'Visit not found' });
+        }
     } catch (error) {
-        throw error
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 }
