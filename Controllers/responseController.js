@@ -5,6 +5,7 @@ const visited = require('../Models/visited');
 const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
     try {
         const ques = await Question.findOne({ quesId });
+        // console.log(ques);
         if (!ques) {
             throw new Error('Question not found!');
         }
@@ -17,10 +18,9 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
 
         const ansStatus = ansStatusMapping[status] || 0;
         const score = ansStatus === 2 || ansStatus === 3 ? 1 : 0;
-        console.log(ansStatus);
+        // console.log(ansStatus);
         const userId = id;
         let existingResponse = await questionResponse.findOne({ quesId, userId });
-        console.log(existingResponse);
         if (!existingResponse) {
             existingResponse = await questionResponse.create({
                 ansStatus,
@@ -32,9 +32,9 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
             });
 
             const user = await User.findById(id);
-            console.log(existingResponse._id);
-            user.responses.addToSet(existingResponse._id);
-            console.log(user.responses)
+            console.log(existingResponse.id);
+            user.responses.addToSet(existingResponse.id); // Add response to user's responses array
+            // console.log(user.responses)
 
             user.calculatedTotalScore += score; // Update total score
             user.category = ques.category; // Update category
@@ -55,7 +55,7 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
             path: 'responses',
             select: 'ansStatus score quesId ansId category -_id'
         });
-
+        console.log(userWithResponses);
         return {
             message: existingResponse._id ? "Response updated successfully" : "Response recorded successfully",
             user: userWithResponses.responses,
@@ -98,7 +98,10 @@ module.exports.isVisited = async (req, res) => {
 
     try {
         const foundVisited = await visited.findOne({ userId: id, category, quesId, isVisited: true });
-        if (foundVisited) return res.status(400).json({ "message": "Already visited" });
+        if (foundVisited) {
+            const alreadyVisited = await visited.find({ userId: id, isVisited: true })
+            return res.status(400).json(alreadyVisited);
+        }
         const [createdVisit, foundVisit] = await Promise.all([
             visited.create({ userId: id, category, quesId, isVisited: true }),
             visited.find({ userId: id, isVisited: true })

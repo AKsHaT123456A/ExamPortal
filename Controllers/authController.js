@@ -1,16 +1,23 @@
-const jwt = require("jsonwebtoken");
 const { User, validateUser } = require("../Models/user");
 const constants = require("../Connections/constants");
 const CryptoJS = require("crypto-js");
-
-
+const axios = require("axios");
 
 const register = async (req, res) => {
   try {
-    // Decrypt the request body
     const encryptedData = req.body.encryptedData;
-    const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, constants.CRYPTO_SECRET_KEY);
-    const decryptedData = JSON.parse(decryptedBytes.toString(CryptoJS.enc.Utf8));
+    const decryptedBytes = CryptoJS.AES.decrypt(
+      encryptedData,
+      constants.CRYPTO_SECRET_KEY
+    );
+    const decryptedData = JSON.parse(
+      decryptedBytes.toString(CryptoJS.enc.Utf8)
+    );
+
+    const validationError = await validateUser(decryptedData);
+    if (validationError) {
+      return res.status(400).json({ message: "Validation failed", error: validationError.details });
+    }
 
     const {
       name,
@@ -22,12 +29,11 @@ const register = async (req, res) => {
       mobileNo,
     } = decryptedData;
 
-    // Generate a secure password with the first letter capitalized
     const firstName = name.split(" ")[0];
-    const capitalizedFirstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+    const capitalizedFirstName =
+      firstName.charAt(0).toUpperCase() + firstName.slice(1);
     const password = `${capitalizedFirstName}@${studentNo}`;
 
-    // Create the user
     const newUser = await User.create({
       name,
       email,
@@ -38,6 +44,8 @@ const register = async (req, res) => {
       password,
       mobileNo,
     });
+
+    const token = req.body.recaptchaToken;
     const recaptchaResponse = await axios.post(
       "https://www.google.com/recaptcha/api/siteverify",
       null,
@@ -48,21 +56,13 @@ const register = async (req, res) => {
         },
       }
     );
-    console.log(recaptchaResponse.data);
+    
     if (!recaptchaResponse.data.success) {
+      await User.findByIdAndDelete(newUser._id);
       return res.status(400).json({ message: "reCAPTCHA verification failed" });
     }
-    const payload = {
-      _id: newUser._id,
-      name: newUser.name,
-      email: newUser.email,
-    };
 
-    const token = jwt.sign(payload, constants.JWT_SECRET_KEY, {
-      expiresIn: "10d",
-    });
-
-    res.status(201).json({ message: "Registered", token });
+    res.status(201).json({ message: "Registered" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Registration failed", error: err.message });
