@@ -5,6 +5,7 @@ const axios = require("axios");
 
 const register = async (req, res) => {
   try {
+    // Decrypt the request body
     const encryptedData = req.body.encryptedData;
     const decryptedBytes = CryptoJS.AES.decrypt(
       encryptedData,
@@ -14,6 +15,7 @@ const register = async (req, res) => {
       decryptedBytes.toString(CryptoJS.enc.Utf8)
     );
 
+    // Validate user data
     const validationError = await validateUser(decryptedData);
     if (validationError) {
       return res.status(400).json({ message: "Validation failed", error: validationError.details });
@@ -29,11 +31,13 @@ const register = async (req, res) => {
       mobileNo,
     } = decryptedData;
 
+    // Generate a secure password with the first letter capitalized
     const firstName = name.split(" ")[0];
     const capitalizedFirstName =
       firstName.charAt(0).toUpperCase() + firstName.slice(1);
     const password = `${capitalizedFirstName}@${studentNo}`;
 
+    // Create the user
     const newUser = await User.create({
       name,
       email,
@@ -45,6 +49,7 @@ const register = async (req, res) => {
       mobileNo,
     });
 
+    // Validate reCAPTCHA
     const token = req.body.recaptchaToken;
     const recaptchaResponse = await axios.post(
       "https://www.google.com/recaptcha/api/siteverify",
@@ -56,8 +61,9 @@ const register = async (req, res) => {
         },
       }
     );
-    
+
     if (!recaptchaResponse.data.success) {
+      // Optionally, you can delete the newly created user here to rollback the registration
       await User.findByIdAndDelete(newUser._id);
       return res.status(400).json({ message: "reCAPTCHA verification failed" });
     }

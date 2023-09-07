@@ -25,6 +25,7 @@ const apiPrefix = '/api/v1';
 const authRoute = require("./Routes/authRoute");
 const quesRoute = require("./Routes/quesRoute");
 const resRoute = require("./Routes/resRoute");
+const catRoute = require("./Routes/catRoute");
 
   // Database connection
   connectDB();
@@ -47,9 +48,10 @@ const resRoute = require("./Routes/resRoute");
   socketSetup(io);
 
   // Routes
-  app.use(`${apiPrefix}`, authRoute);
+  app.use(`${apiPrefix}/auth`, authRoute);
   app.use(`${apiPrefix}`, quesRoute);
   app.use(`${apiPrefix}`, resRoute);
+  app.use(`${apiPrefix}/category`, catRoute);
 
   // Error handling middleware
   app.use((err, req, res, next) => {

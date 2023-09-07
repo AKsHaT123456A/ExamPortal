@@ -93,8 +93,9 @@ const categoryquestion = async (req, res) => {
 const countQuestion = async (req, res) => {
     try {
         const category = req.query.category;
-        const categoryCount = await Question.countDocuments({ category });
-        return res.status(200).json({ success: true, msg: { categoryCount } });
+        const count = await Question.find({category});
+        console.log(categoryCount, count);
+        return res.status(200).json({ success: true, msg: { count } });
     } catch (error) {
         return res.status(error.status || 500).json({ error: { message: error.message || "Internal Server Error" } });
     }

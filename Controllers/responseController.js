@@ -98,22 +98,25 @@ module.exports.isVisited = async (req, res) => {
 
     try {
         const foundVisited = await visited.findOne({ userId: id, category, quesId, isVisited: true });
+        
         if (foundVisited) {
-            const alreadyVisited = await visited.find({ userId: id, isVisited: true })
+            const alreadyVisited = await visited.find({ userId: id, isVisited: true });
             return res.status(200).json(alreadyVisited);
         }
-        const [createdVisit, foundVisit] = await Promise.all([
-            visited.create({ userId: id, category, quesId, isVisited: true }),
-            visited.find({ userId: id, isVisited: true })
-        ]);
+        
+        await visited.create({ userId: id, category, quesId, isVisited: true });
+        const updatedVisited = await visited.find({ userId: id, isVisited: true });
+        
+        return res.status(200).json(updatedVisited);
 
-        if (foundVisit) {
-            res.status(200).json(foundVisit);
-        } else {
-            res.status(404).json({ message: 'Visit not found' });
-        }
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+
+
+
+
+
+

@@ -12,5 +12,5 @@ router.get("/preregistration", csrfProtection, (req, res) => {
 });
 
 
-router.post("/register", limiter, browserOnlyMiddleware, csrfProtection, register);
+router.post("/register",limiter,browserOnlyMiddleware,csrfProtection, register);
 module.exports = router;
