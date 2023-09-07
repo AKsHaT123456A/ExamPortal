@@ -100,7 +100,7 @@ module.exports.isVisited = async (req, res) => {
         const foundVisited = await visited.findOne({ userId: id, category, quesId, isVisited: true });
         if (foundVisited) {
             const alreadyVisited = await visited.find({ userId: id, isVisited: true })
-            return res.status(400).json(alreadyVisited);
+            return res.status(200).json(alreadyVisited);
         }
         const [createdVisit, foundVisit] = await Promise.all([
             visited.create({ userId: id, category, quesId, isVisited: true }),
