@@ -16,7 +16,12 @@ const app = express();
 const server = http.createServer(app);
 
 // Create a Socket.IO instance attached to the server
-const io = socketIO(server);
+const io = socketIO(server, {
+  cors: {
+    origin: 'https://csi-portal.netlify.app/',
+    methods: ['GET', 'POST'],
+  },
+});
 
 // API prefix
 const apiPrefix = '/api/v1';
