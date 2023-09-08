@@ -6,7 +6,6 @@ const socketIO = require('socket.io');
 const constants = require("./Connections/constants");
 const connectDB = require("./Connections/db");
 const { socketSetup } = require("./Utils/leaderSocket");
-const corsMiddleware = require("./middleware/corsMiddleware");
 require("dotenv").config();
 
 // Create an Express app
@@ -32,40 +31,40 @@ const quesRoute = require("./Routes/quesRoute");
 const resRoute = require("./Routes/resRoute");
 const catRoute = require("./Routes/catRoute");
 
-  // Database connection
-  connectDB();
+// Database connection
+connectDB();
 
-  // Set trust proxy for reverse proxy support
-  app.set("trust proxy", 1);
+// Set trust proxy for reverse proxy support
+app.set("trust proxy", 1);
 
-  // Middleware setup
-  app.use(corsMiddleware);
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
-  app.use(helmet());
-  app.use(compression());
-  // Content Security Policy middleware using Helmet
-  app.use(
-    helmet.contentSecurityPolicy()
-  );
+// Middleware setup
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(helmet());
+app.use(compression());
+// Content Security Policy middleware using Helmet
+app.use(
+  helmet.contentSecurityPolicy()
+);
 
-  // Socket setup
-  socketSetup(io);
+// Socket setup
+socketSetup(io);
 
-  // Routes
-  app.use(`${apiPrefix}/auth`, authRoute);
-  app.use(`${apiPrefix}`, quesRoute);
-  app.use(`${apiPrefix}`, resRoute);
-  app.use(`${apiPrefix}/category`, catRoute);
+// Routes
+app.use(`${apiPrefix}/auth`, authRoute);
+app.use(`${apiPrefix}`, quesRoute);
+app.use(`${apiPrefix}`, resRoute);
+app.use(`${apiPrefix}/category`, catRoute);
 
-  // Error handling middleware
-  app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500).json({ error: "Internal Server Error" });
-  });
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: "Internal Server Error" });
+});
 
-  // Start the server
-  server.listen(constants.PORT, () => {
-    console.log(` Server running at port ${constants.PORT}`);
-  });
+// Start the server
+server.listen(constants.PORT, () => {
+  console.log(` Server running at port ${constants.PORT}`);
+});
 
