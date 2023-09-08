@@ -7,6 +7,7 @@ const constants = require("./Connections/constants");
 const connectDB = require("./Connections/db");
 const { socketSetup } = require("./Utils/leaderSocket");
 require("dotenv").config();
+const cors = require("cors");
 
 // Create an Express app
 const app = express();
