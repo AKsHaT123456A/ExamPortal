@@ -1,14 +1,19 @@
-const {User} = require("../Models/user");
+const { User } = require("../Models/user");
 
 module.exports.updateCategory = async (req, res) => {
     try {
-        const { category, id } = req.params;
+        const { category} = req.query;
+        const {id } = req.params;
+        console.log(category, id);
 
         const updatedUser = await User.findOneAndUpdate(
             { _id: id },
             { $set: { category } },
         );
-
+        if (!category) {
+            const category = await User.findById(id).select('category');
+            return res.status(200).json({ category: category.category });
+        }
         if (!updatedUser) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -18,19 +23,4 @@ module.exports.updateCategory = async (req, res) => {
         console.error("Error:", err);
         return res.status(500).json({ error: "Internal Server Error", message: err.message });
     }
-};
-
-
-module.exports.category = async (req, res) => {
-    try {
-        const {id} = req.params;
-        const category = await User.findById(id).select('category');
-        if(!category) return res.status(404).json({message: "Category not found"});
-        console.log(category);
-        return res.status(200).json({category: category.category});
-    } catch (error) {
-        return res.status(500).json({ error: "Internal Server Error", message: error.message });
-    }
 }
-
-
