@@ -3,6 +3,7 @@ const Question = require('../Models/question');
 const questionResponse = require('../Models/questionResponse');
 const visited = require('../Models/visited');
 const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
+    console.log(id, status, quesId, ansId);
     try {
         const ques = await Question.findOne({ quesId });
         // console.log(ques);
@@ -21,7 +22,9 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
         // console.log(ansStatus);
         const userId = id;
         let existingResponse = await questionResponse.findOne({ quesId, userId });
+        console.log(existingResponse);
         if (!existingResponse) {
+            console.log("HI");
             existingResponse = await questionResponse.create({
                 ansStatus,
                 score,
@@ -32,7 +35,6 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
             });
 
             const user = await User.findById(id);
-            console.log(existingResponse.id);
             user.responses.addToSet(existingResponse.id); // Add response to user's responses array
             // console.log(user.responses)
 
@@ -47,8 +49,10 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
             const scoreChange = score - oldScore;
             existingResponse.score = score;
             existingResponse.ansStatus = ansStatus;
+            existingResponse.ansId = ansId;
             user.calculatedTotalScore += scoreChange;
-            await Promise.all([existingResponse.save(), user.save()]);
+            const [a, b] = await Promise.all([existingResponse.save(), user.save()]);
+            //    console.log(a);
         }
 
         const userWithResponses = await User.findById(id).populate({
@@ -98,15 +102,15 @@ module.exports.isVisited = async (req, res) => {
 
     try {
         const foundVisited = await visited.findOne({ userId: id, category, quesId, isVisited: true });
-        
+
         if (foundVisited) {
             const alreadyVisited = await visited.find({ userId: id, isVisited: true });
             return res.status(200).json(alreadyVisited);
         }
-        
+
         await visited.create({ userId: id, category, quesId, isVisited: true });
         const updatedVisited = await visited.find({ userId: id, isVisited: true });
-        
+
         return res.status(200).json(updatedVisited);
 
     } catch (error) {
