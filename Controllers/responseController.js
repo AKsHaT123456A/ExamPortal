@@ -24,7 +24,6 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
         let existingResponse = await questionResponse.findOne({ quesId, userId });
         console.log(existingResponse);
         if (!existingResponse) {
-            console.log("HI");
             existingResponse = await questionResponse.create({
                 ansStatus,
                 score,
@@ -39,7 +38,6 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
             // console.log(user.responses)
 
             user.calculatedTotalScore += score; // Update total score
-            user.category = ques.category; // Update category
             await user.save();
         } else {
             const user = await User.findById(id);
