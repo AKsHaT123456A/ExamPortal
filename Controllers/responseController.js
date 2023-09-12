@@ -61,7 +61,6 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
         return {
             message: existingResponse._id ? "Response updated successfully" : "Response recorded successfully",
             user: userWithResponses.responses,
-            calculatedTotalScore: userWithResponses.calculatedTotalScore,
             category: userWithResponses.category
         };
     } catch (error) {
