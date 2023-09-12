@@ -29,6 +29,7 @@ const register = async (req, res) => {
       isHosteler,
       studentNo,
       mobileNo,
+      recaptchaToken
     } = decryptedData;
 
     // Generate a secure password with the first letter capitalized
@@ -50,14 +51,13 @@ const register = async (req, res) => {
     });
 
     // Validate reCAPTCHA
-    const token = req.body.recaptchaToken;
     const recaptchaResponse = await axios.post(
       "https://www.google.com/recaptcha/api/siteverify",
       null,
       {
         params: {
           secret: constants.RECAPTCHA_SECRET_KEY,
-          response: token,
+          response: recaptchaToken,
         },
       }
     );

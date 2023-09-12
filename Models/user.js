@@ -3,13 +3,13 @@ const userValidationSchema = require("../validators/userValidationSchema");
 
 const userSchema = new mongoose.Schema(
     {
-        email: { type: String, unique: true, required: true },
+        email_: { type: String, unique: true, required: true },
         gender: { type: String, enum: ['Female', 'Male'] },
         isHosteler: { type: Boolean, default: false },
         isVerified: { type: Boolean, default: false },
         name: { type: String, trim: true, required: true },
         mobileNo: { type: String, unique: true, required: true },
-        studentNo: { type: String, unique: true, required: true },
+        studentnNo: { type: String, unique: true, required: true },
         branch: { type: String, enum: ['IT', 'CSE', 'CSEAIML', 'AIML', 'CS', 'EN', 'ECE', 'MECHANICAL', 'CSEDS', 'CSIT', 'CIVIL'] },
         responses: [{
             type: mongoose.Schema.Types.ObjectId,
@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
         logintime: { type: Number, default: 0 },
         isRelogin: { type: Boolean, default: false },
         isSubmit: { type: Boolean, default: false },
-        category: { type: String, default: "Cpp" },
+        category: { type: String },
     },
     { versionKey: false }
 );
@@ -32,7 +32,6 @@ userSchema.virtual('calculatedTotalScore').get(function () {
 const validateUser = (user) => {
     try {
         return userValidationSchema.validateAsync(user);
-        return null;
     }
     catch (err) {
         return err;
