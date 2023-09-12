@@ -4,10 +4,6 @@ module.exports.updateCategory = async (req, res) => {
     try {
         const { category } = req.query;
         const { id } = req.params;
-        const user = await User.findById(id);
-        console.log(user);
-        if (user.category) return res.status(200).json({ message: "Category already updated", category: user.category });
-
         if (!category) {
             const category = await User.findById(id).select('category');
             return res.status(200).json({ category: category.category });
