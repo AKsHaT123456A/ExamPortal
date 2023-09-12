@@ -29,7 +29,7 @@ const register = async (req, res) => {
       isHosteler,
       studentNo,
       mobileNo,
-      recaptchaToken
+      // recaptchaToken
     } = decryptedData;
 
     // Generate a secure password with the first letter capitalized
@@ -51,22 +51,22 @@ const register = async (req, res) => {
     });
 
     // Validate reCAPTCHA
-    const recaptchaResponse = await axios.post(
-      "https://www.google.com/recaptcha/api/siteverify",
-      null,
-      {
-        params: {
-          secret: constants.RECAPTCHA_SECRET_KEY,
-          response: recaptchaToken,
-        },
-      }
-    );
+    // const recaptchaResponse = await axios.post(
+    //   "https://www.google.com/recaptcha/api/siteverify",
+    //   null,
+    //   {
+    //     params: {
+    //       secret: constants.RECAPTCHA_SECRET_KEY,
+    //       response: recaptchaToken,
+    //     },
+    //   }
+    // );
 
-    if (!recaptchaResponse.data.success) {
-      // Optionally, you can delete the newly created user here to rollback the registration
-      await User.findByIdAndDelete(newUser._id);
-      return res.status(400).json({ message: "reCAPTCHA verification failed" });
-    }
+    // if (!recaptchaResponse.data.success) {
+    //   // Optionally, you can delete the newly created user here to rollback the registration
+    //   await User.findByIdAndDelete(newUser._id);
+    //   return res.status(400).json({ message: "reCAPTCHA verification failed" });
+    // }
 
     res.status(201).json({ message: "Registered" });
   } catch (err) {
