@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
         isVerified: { type: Boolean, default: false },
         name: { type: String, trim: true, required: true },
         mobileNo: { type: String, unique: true, required: true },
-        studentnNo: { type: String, unique: true, required: true },
+        studentNo: { type: String, unique: true, required: true },
         branch: { type: String, enum: ['IT', 'CSE', 'CSEAIML', 'AIML', 'CS', 'EN', 'ECE', 'MECHANICAL', 'CSEDS', 'CSIT', 'CIVIL'] },
         responses: [{
             type: mongoose.Schema.Types.ObjectId,
