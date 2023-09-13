@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
         name: { type: String, trim: true, required: true },
         mobileNo: { type: String, unique: true, required: true },
         studentNo: { type: String, unique: true, required: true },
-        branch: { type: String, enum: ['IT', 'CSE', 'CSEAIML', 'AIML', 'CS', 'EN', 'ECE', 'MECHANICAL', 'CSEDS', 'CSIT', 'CIVIL'] },
+        branch: { type: String, enum: ['IT', 'CSE', 'CSE-AIML', 'AIML', 'CS', 'EN', 'ECE', 'ME', 'CSE-DS', 'CSIT', 'CE',"CSE-HINDI"] },
         responses: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "questionResponse",
