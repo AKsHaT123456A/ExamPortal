@@ -7,6 +7,7 @@ const register = async (req, res) => {
   try {
     // Decrypt the request body
     const encryptedData = req.body.encryptedData;
+    console.log(encryptedData);
     const decryptedBytes = CryptoJS.AES.decrypt(
       encryptedData,
       constants.CRYPTO_SECRET_KEY

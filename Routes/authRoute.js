@@ -3,8 +3,7 @@ const register = require("../Controllers/authController");
 const limiter = require("../middleware/limiter");
 const browserOnlyMiddleware = require("../middleware/browserCheckMiddleware");
 
-const csrfProtection = csrf();
-
+const csrfProtection = csrf({ cookie: true });
 const router = require("express").Router();
 router.get("/preregistration", csrfProtection, (req, res) => {
     const csrfToken = req.csrfToken();
@@ -12,5 +11,5 @@ router.get("/preregistration", csrfProtection, (req, res) => {
 });
 
 
-router.post("/register",limiter,browserOnlyMiddleware,csrfProtection, register);
+router.post("/register",limiter,browserOnlyMiddleware, register);
 module.exports = router;

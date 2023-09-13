@@ -8,7 +8,7 @@ const connectDB = require("./Connections/db");
 const { socketSetup } = require("./Utils/leaderSocket");
 require("dotenv").config();
 const cors = require("cors");
-
+const cookieParser = require('cookie-parser');
 // Create an Express app
 const app = express();
 
@@ -31,7 +31,8 @@ const authRoute = require("./Routes/authRoute");
 const quesRoute = require("./Routes/quesRoute");
 const resRoute = require("./Routes/resRoute");
 const catRoute = require("./Routes/catRoute");
-
+const path = require("path");
+app.use(express.static(path.join(__dirname, 'public')));
 // Database connection
 connectDB();
 
@@ -40,6 +41,7 @@ app.set("trust proxy", 1);
 
 // Middleware setup
 app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
@@ -61,7 +63,7 @@ app.use(`${apiPrefix}/category`, catRoute);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(500).json({ error: "Internal Server Error" });
+  res.status(500).json({ error: "Internal Server Error" ,err:err.message});
 });
 
 // Start the server
