@@ -1,5 +1,4 @@
 const nodemailer = require("nodemailer");
-const fs = require("fs");
 const emailer = async (to, name, uniqueKey) => {
     // let testAccount=await nodemailer.createTestAccount();
     //connect with the smpt server
@@ -78,7 +77,7 @@ const emailer = async (to, name, uniqueKey) => {
         <body>
             <div class="container">
             <div class="header">
-            <img src="C:/Users/aksha/Desktop/examPortal_CSI/images/CINE.png" alt="Company Logo" style="max-width: 100%; height: auto;">
+            <img src="https://lh3.googleusercontent.com/drive-viewer/AITFw-zdoudEdNalFJQ1STmGqJEvdGOU4nCPEdzkqxxKCjpKrHc5O0i8Iz8KY_-kjuJQuYvUHh8JwtnmYEcCLFA_JJaLxfB_=s2560" alt="CSI" style="max-width: 100%; height: auto;">
             Confirmation of Registration for CINE Recruitment Drive
         </div>
                 <div class="content">
