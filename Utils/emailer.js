@@ -24,85 +24,88 @@ const emailer = async (to, name, uniqueKey) => {
             <meta charset="UTF-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <link rel="stylesheet" href="style.css">
-            <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&display=swap" rel="stylesheet">
-            <title>Document</title>
+            <title>Confirmation of Registration</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 0;
+                    padding: 0;
+                    background-color: #f4f4f4;
+                }
+        
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #ffffff;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+                }
+        
+                .header {
+                    background-color: #007acc;
+                    color: #ffffff;
+                    text-align: center;
+                    padding: 10px;
+                    font-size: 24px;
+                }
+        
+                .content {
+                    margin-top: 20px;
+                    font-size: 16px;
+                    line-height: 1.6;
+                }
+        
+                .button {
+                    display: inline-block;
+                    padding: 10px 20px;
+                    background-color: #007acc;
+                    color: #ffffff;
+                    text-decoration: none;
+                    border-radius: 5px;
+                    margin-top: 20px;
+                }
+        
+                .footer {
+                    text-align: center;
+                    margin-top: 20px;
+                    font-size: 14px;
+                    color: #777;
+                }
+            </style>
         </head>
-        <body style="margin: 0;padding: 0;">        
-                        <div style="margin: 10px;">
-                            <div>
-                                <div style="margin: 7px 0; color: black;">
-                                    <div style="font-size: 22px; font-weight:600;">"Great coders are today's rockstars. Tomorrow's rockstars will be great ideators who code."</div>
-                                <div><img src="https://lh3.googleusercontent.com/drive-viewer/AFGJ81rnEq_Tc8Z95oYqyjpDtybhaWnz2IrSGMAbCe8TuWCVzVbv2Eu3b6xKZQvU45FIOx3d4EXUj_-SXgcBdsA6J2J6bDLTfg=s1600" style="width:20rem;margin-top: 2rem;"/></div>
-                                    <p>Dear ${name}</p>
-                                    <p>Greetings from CSI</p>
-                                    <div style="font-size: 20px; font-weight:700; margin-top:25px;">
-                                        Your details have been submitted successfully.
-                                    </div>
-                                    <div style="margin: 30px 0 10px 0;">
-                                        <p>We extend our warm greetings from <strong>Computer Society of India </strong>. It is with great pleasure. </p>
-                                        <p><strong>Congratulations</strong> on successfully completing the first round of registration! We appreciate your interest in our event, and we're excited to have you onboard.</p>
-                                        <p>To complete your registration process, please click on the link provided below.</p>
-                                    </div>
-                                    <button type="button" style="color:white;background:green;margin:auto;"><a href="https://csi-examportal.onrender.com/api/v1/auth/verify/${uniqueKey}" style="text-decoration:none;color:white">Click Here</a></button>
-                                    <div style="font-size: 17px; font-weight:700; margin-top:30px;">
-                                        Please note that your registration is not complete until you have finished all the required steps, so we encourage you to complete this process as soon as possible. If you encounter any issues or have questions along the way, please don't hesitate to reach out to our team for assistance.                            
-                                    </div>
-                                    <div style="margin-top: 40px;">
-        
-                                        <p>For more updates follow us on </p>
-                                        <p>Instagram: <a href="https://instagram.com/csi_akgec?igshid=YmMyMTA2M2Y=" style="text-decoration: none;"><strong>csi_akgec</strong></a></p>
-                                        <h5>Coordinators: </h5> <br/> <p><strong>Ayush Kumar</strong>: 9536330961 <br />
-                                        <strong>Manish Kumar</strong>: 6394291193 </p>
-                                    </div>
-        
-                                    <div style="margin-top: 40px;">
-                                        <p>Thank you for your interest in our event, and we look forward to welcoming you as a registered participant.</p>
-                                    </div>
-                                    <p>See you at the event!!</p>
-                                </div>
-                                <p><div>Sincerely,</div><div style="font-weight: 600;">Computer Society of India, Ajay Kumar Garg Engineering College</div></p>
-                            </div>
-                            <hr>
-                        </div>
-                    </div>
-                    <div>
-                        <div style="text-align: center; background-color: rgba(0,51,153,1); color: white; padding: 10px; font-family: Arial, Helvetica, sans-serif;">
-                            <p style="font-size: 14px;">Computer Society of India , 3rd floor,CS-IT block , Ajay Kumar Garg Engineering College ,  Ghaziabad</p>
-                            <p style="font-size: 14px; font-family: monospace; color: white; margin-top: 5px;">
-                                <strong>Email:</strong> <div style="color:white;">csichapters@gmail.com</div>
-                            </p>
-                            <table width="100%" cellspacing="0" cellpadding="0">
-                                <tr>
-                                    <td style="text-align: center;">
-                                        <div style="display: block; margin-top: 20px;">
-                                            <a style="text-decoration: none; margin: 10px 10px 0 10px; font-size: 22px;" target="_blank" href="mailto:csichapters@gmail.com">
-                                                <img src="https://drive.google.com/uc?export=view&id=1Fhj8Nl3ApCpAlej4C9vTou9rWmGZ7ibf" height="25" width="25" alt="mail">
-                                            </a>
-                                            <a style="text-decoration: none; margin: 10px 10px 0 10px; font-size: 22px;" target="_blank" href="https://csiakgec.in/">
-                                                <img src="https://drive.google.com/uc?export=view&id=1Zby_O1QOJN5GUl73ayeptYeY5kDD_0v3" height="25" width="25" alt="web">
-                                            </a>
-                                            <a style="text-decoration: none; margin: 10px 10px 0 10px; font-size: 22px;" target="_blank" href="https://www.linkedin.com/in/csi-akgec">
-                                                <img src="https://drive.google.com/uc?export=view&id=1Nn_7vqmz_DosriWFbTv_1ThTblXEw28r" height="25" width="25" alt="linkedin">
-                                            </a>
-                                            <a style="text-decoration: none; margin: 10px 10px 0 10px; font-size: 22px;" target="_blank" href="https://www.instagram.com/csi_akgec/">
-                                                <img src="https://drive.google.com/uc?export=view&id=1K_8oj5vPMCieVXVD3KhtSHSKX75PJSv4" height="25" width="25" alt="insta">
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div style="text-align: center; background-color: white; padding: 10px 0;">
-                            <div style="font-weight: 600; color: rgba(0,51,153,1);">&copy; Computer Society of India | AKGEC</div>
-                        </div>
-                    </div>
+        <body>
+            <div class="container">
+            <div class="header">
+            <img src="C:/Users/aksha/Desktop/examPortal_CSI/images/CINE.png" alt="Company Logo" style="max-width: 100%; height: auto;">
+            Confirmation of Registration for CINE Recruitment Drive
+        </div>
+                <div class="content">
+                    <p>Dear ${name},</p>
+                    <p>We are pleased to inform you that your registration for the CINE Recruitment Drive, organized by TEAM CSI, has been successfully received and processed. Congratulations on taking this important step towards your career development!</p>
+                    <p>Here are the details of the event:</p>
+                    <ul>
+                        <li>Event: CINE Recruitment Drive</li>
+                        <li>Organizer: TEAM CSI</li>
+                        <li>Date: 18 September, 2023</li>
+                        <li>Time: 4:00 PM</li>
+                    </ul>
+                    <p>To confirm your registration and ensure your participation in the event, please click the following link:</p>
+                    <p><a href=https://csi-examportal.onrender.com/api/v1/auth/verify/${uniqueKey} class="button">Confirm Registration</a></p>
+                    <p>Kindly note that your registration will not be considered valid until this confirmation step is completed.</p>
+                    <p>Please make sure to mark your calendar and set a reminder for this event. It will be a great opportunity for 2nd-year students like you to explore exciting career prospects in the industry.</p>
+                    <p>Location and further instructions for the event will be communicated to you closer to the date. In the meantime, if you have any questions or need any additional information, please feel free to contact us at <a href="mailto:csichapters@gmail.com">csichapters@gmail.com</a> or can contact us at Instagram handle <a href="https://www.instagram.com/csi_akgec/">csi_akgec</a>.</p>
+                    <p>We look forward to seeing you at the CINE Recruitment Drive and wish you the best of luck in your future endeavors.</p>
+                    <p>Best Regards,<br>Team CSI</p>
+                </div>
+                <div class="footer">
+                    &copy; 2023 TEAM CSI | <a href="#">Privacy Policy</a>
                 </div>
             </div>
         </body>
-        </html>` ,
+        </html>
+        ` ,
     });
     console.log("Message sent: %s", info.messageId);
 
