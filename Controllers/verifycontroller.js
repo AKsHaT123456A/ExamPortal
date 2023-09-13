@@ -6,7 +6,7 @@ const verify = async ({ params }, res) => {
         console.log(id);
         const newUser = await User.findByIdAndUpdate({ _id: id }, { $set: { isVerified: true } });
         console.log(newUser);
-        return res.redirect(`cine-2023.vercel.app/:${id}`);
+        return res.redirect(`https://cine-2023.vercel.app/:${id}`);
     }
     catch (err) {
         res.status(400).json("!");
