@@ -32,7 +32,6 @@ const quesRoute = require("./Routes/quesRoute");
 const resRoute = require("./Routes/resRoute");
 const catRoute = require("./Routes/catRoute");
 const path = require("path");
-app.use(express.static(path.join(__dirname, 'public')));
 // Database connection
 connectDB();
 
