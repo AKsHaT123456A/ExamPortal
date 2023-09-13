@@ -132,7 +132,7 @@ const registerDecrypt = async (req, res) => {
     } = req.body;
 
     // Decrypt the data using your secret key
-    const secretKey = 'your_secret_key_here'; // Replace with your actual secret key
+    const secretKey = 'b5c1f7e190de3e88ca462b3f98b41c76a88f8a6ab82be52c75e1871cc653b37'; // Replace with your actual secret key
     const decryptedData = decryptData(encryptedData, secretKey);
 
     if (!decryptedData) {
