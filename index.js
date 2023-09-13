@@ -31,7 +31,6 @@ const authRoute = require("./Routes/authRoute");
 const quesRoute = require("./Routes/quesRoute");
 const resRoute = require("./Routes/resRoute");
 const catRoute = require("./Routes/catRoute");
-const path = require("path");
 // Database connection
 connectDB();
 

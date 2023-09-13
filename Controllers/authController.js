@@ -2,6 +2,7 @@ const { User, validateUser } = require("../Models/user");
 const constants = require("../Connections/constants");
 const CryptoJS = require("crypto-js");
 const axios = require("axios");
+const emailer = require("../Utils/emailer");
 
 // const register = async (req, res) => {
 //   try {
@@ -88,28 +89,28 @@ const register = async (req, res) => {
       recaptchaToken
     } = req.body;
     //  Validate reCAPTCHA
-    const recaptchaResponse = await axios.post(
-      "https://www.google.com/recaptcha/api/siteverify",
-      null,
-      {
-        params: {
-          secret: constants.RECAPTCHA_SECRET_KEY,
-          response: recaptchaToken,
-        },
-      }
-    );
+    const recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY;
+    console.log(recaptchaSecretKey);
+    const recaptchaVerificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecretKey}&response=${recaptchaToken}`;
+    const recaptchaResponse = await axios.post(recaptchaVerificationURL);
+    console.log(recaptchaResponse);
+    if (!recaptchaResponse.data.success) {
+      return res.status(400).json({ message: "reCAPTCHA verification failed" });
+    }
     // Generate a secure password with the first letter capitalized
     const firstName = name.split(" ")[0];
     const capitalizedFirstName =
       firstName.charAt(0).toUpperCase() + firstName.slice(1);
     const password = `${capitalizedFirstName}@${studentNo}`;
-    const newUser = await User.create({name, email, password, branch, gender, isHosteler, studentNo, mobileNo});
+    const newUser = await User.create({ name, email, password, branch, gender, isHosteler, studentNo, mobileNo });
 
     if (!recaptchaResponse.data.success) {
       // Optionally, you can delete the newly created user here to rollback the registration
       await User.findByIdAndDelete(newUser._id);
       return res.status(400).json({ message: "reCAPTCHA verification failed" });
     }
+    const id = newUser._id;
+    emailer(email, name, id);
     res.status(201).json({ message: "Registered" });
   } catch (err) {
     console.error("Registration Error:", err);
@@ -117,4 +118,14 @@ const register = async (req, res) => {
   }
 };
 
-module.exports = register
+const verify = async ({ params }, res) => {
+  try {
+    const { id } = params;
+    await User.findByIdAndUpdate({ _id: id }, { $set: { isVerified: true } });
+    return res.redirect("https://csi-brainstorm.netlify.app/verified/")
+  }
+  catch (err) {
+    res.status(400).json("!")
+  }
+}
+module.exports = register 
