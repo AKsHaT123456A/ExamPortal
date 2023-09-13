@@ -8,11 +8,13 @@ const register = async (req, res) => {
     // Decrypt the request body
     const encryptedData = req.body.encryptedData;
     console.log(encryptedData);
+    console.log(process.env.SECRET_KEY);
     const decryptedBytes = CryptoJS.AES.decrypt(
       encryptedData,
       process.env.SECRET_KEY
     );
-    console.log(process.env.SECRET_KEY);
+    console.log(decryptedBytes);
+    console.log(constants.CACHE_TTL);
     const decryptedData = JSON.parse(
       decryptedBytes.toString(CryptoJS.enc.Utf8)
     );
