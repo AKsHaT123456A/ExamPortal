@@ -118,14 +118,5 @@ const register = async (req, res) => {
   }
 };
 
-const verify = async ({ params }, res) => {
-  try {
-    const { id } = params;
-    await User.findByIdAndUpdate({ _id: id }, { $set: { isVerified: true } });
-    return res.redirect("https://csi-brainstorm.netlify.app/verified/")
-  }
-  catch (err) {
-    res.status(400).json("!")
-  }
-}
+
 module.exports = register 

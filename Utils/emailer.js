@@ -46,7 +46,7 @@ const emailer = async (to, name, uniqueKey) => {
                                         <p><strong>Congratulations</strong> on successfully completing the first round of registration! We appreciate your interest in our event, and we're excited to have you onboard.</p>
                                         <p>To complete your registration process, please click on the link provided below.</p>
                                     </div>
-                                    <button type="button" style="color:white;background:green;margin:auto;"><a href="https://csiform-23-production-6db0.up.railway.app/api/verify/${uniqueKey}" style="text-decoration:none;color:white">Click Here</a></button>
+                                    <button type="button" style="color:white;background:green;margin:auto;"><a href="https://csi-examportal.onrender.com/api/v1/auth/verify/${uniqueKey}" style="text-decoration:none;color:white">Click Here</a></button>
                                     <div style="font-size: 17px; font-weight:700; margin-top:30px;">
                                         Please note that your registration is not complete until you have finished all the required steps, so we encourage you to complete this process as soon as possible. If you encounter any issues or have questions along the way, please don't hesitate to reach out to our team for assistance.                            
                                     </div>
