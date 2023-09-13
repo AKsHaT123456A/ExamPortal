@@ -1,9 +1,7 @@
-// const { User, validateUser } = require("../Models/user");
-// const constants = require("../Connections/constants");
-// const CryptoJS = require("crypto-js");
-// const axios = require("axios");
-
-const { User } = require("../Models/user");
+const { User, validateUser } = require("../Models/user");
+const constants = require("../Connections/constants");
+const CryptoJS = require("crypto-js");
+const axios = require("axios");
 
 // const register = async (req, res) => {
 //   try {
@@ -100,16 +98,23 @@ const register = async (req, res) => {
         },
       }
     );
+    // Generate a secure password with the first letter capitalized
+    const firstName = name.split(" ")[0];
+    const capitalizedFirstName =
+      firstName.charAt(0).toUpperCase() + firstName.slice(1);
+    const password = `${capitalizedFirstName}@${studentNo}`;
+    const newUser = await User.create({name, email, password, branch, gender, isHosteler, studentNo, mobileNo});
 
     if (!recaptchaResponse.data.success) {
       // Optionally, you can delete the newly created user here to rollback the registration
       await User.findByIdAndDelete(newUser._id);
       return res.status(400).json({ message: "reCAPTCHA verification failed" });
     }
-    await User.create(name, email, password, branch, gender, isHosteler, studentNo, mobileNo);
     res.status(201).json({ message: "Registered" });
   } catch (err) {
     console.error("Registration Error:", err);
     res.status(500).json({ message: "Registration failed", error: err.message });
   }
-}
+};
+
+module.exports = register

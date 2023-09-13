@@ -3,7 +3,7 @@ const userValidationSchema = require("../validators/userValidationSchema");
 
 const userSchema = new mongoose.Schema(
     {
-        email_: { type: String, unique: true, required: true },
+        email: { type: String, unique: true, required: true },
         gender: { type: String, enum: ['Female', 'Male'] },
         isHosteler: { type: Boolean, default: false },
         isVerified: { type: Boolean, default: false },
