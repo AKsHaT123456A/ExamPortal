@@ -182,9 +182,9 @@ const registerDecrypt = async (req, res) => {
     if (err.code === 11000) {
       // Duplicate key error, check which field is duplicated
       if (err.keyPattern.email) {
-        return res.status(400).json({ message: "Email already exists" });
+        return res.status(401).json({ message: "Email already exists" });
       } else if (err.keyPattern.studentNo) {
-        return res.status(400).json({ message: "Student number already exists" });
+        return res.status(401).json({ message: "Student number already exists" });
       }
     }
 
