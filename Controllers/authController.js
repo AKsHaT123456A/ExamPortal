@@ -163,7 +163,7 @@ const registerDecrypt = async (req, res) => {
     const capitalizedFirstName =
       firstName.charAt(0).toUpperCase() + firstName.slice(1);
     const password = `${capitalizedFirstName}@${studentNo}`;
-    
+
     const newUser = await User.create({
       name,
       email,
@@ -179,6 +179,15 @@ const registerDecrypt = async (req, res) => {
     emailer(email, name, id);
     res.status(201).json({ message: "Registered" });
   } catch (err) {
+    if (err.code === 11000) {
+      // Duplicate key error, check which field is duplicated
+      if (err.keyPattern.email) {
+        return res.status(400).json({ message: "Email already exists" });
+      } else if (err.keyPattern.studentNo) {
+        return res.status(400).json({ message: "Student number already exists" });
+      }
+    }
+
     console.error("Registration Error:", err);
     res.status(500).json({ message: "Registration failed", error: err.message });
   }
