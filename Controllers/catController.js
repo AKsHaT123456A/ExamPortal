@@ -1,3 +1,4 @@
+const { testingUser } = require("../Models/testingUser");
 const { User } = require("../Models/user");
 
 module.exports.updateCategory = async (req, res) => {
@@ -5,10 +6,10 @@ module.exports.updateCategory = async (req, res) => {
         const { category } = req.query;
         const { id } = req.params;
         if (!category) {
-            const category = await User.findById(id).select('category');
+            const category = await testingUser.findById(id).select('category');
             return res.status(200).json({ category: category.category });
         }
-        const updatedUser = await User.findOneAndUpdate(
+        const updatedUser = await testingUser.findOneAndUpdate(
             { _id: id },
             { $set: { category } },
         );

@@ -2,6 +2,7 @@ const { User } = require('../Models/user');
 const Question = require('../Models/question');
 const questionResponse = require('../Models/questionResponse');
 const visited = require('../Models/visited');
+const { testingUser } = require('../Models/testingUser');
 const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
     console.log(id, status, quesId, ansId);
     try {
@@ -33,14 +34,14 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
                 userId
             });
 
-            const user = await User.findById(id);
+            const user = await testingUser.findById(id);
             user.responses.addToSet(existingResponse.id); // Add response to user's responses array
             // console.log(user.responses)
 
             user.calculatedTotalScore += score; // Update total score
             await user.save();
         } else {
-            const user = await User.findById(id);
+            const user = await testingUser.findById(id);
 
             // Calculate score change and update total score
             const oldScore = existingResponse.score;
@@ -53,7 +54,7 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
             //    console.log(a);
         }
 
-        const userWithResponses = await User.findById(id).populate({
+        const userWithResponses = await testingUser.findById(id).populate({
             path: 'responses',
             select: 'ansStatus score quesId ansId category -_id'
         });
@@ -83,7 +84,7 @@ module.exports.response = async (req, res) => {
 module.exports.userResponse = async (req, res) => {
     const { id } = req.query;
     try {
-        const user = await User.findById(id).populate({
+        const user = await testingUser.findById(id).populate({
             path: 'responses',
             select: 'ansStatus score quesId ansId -_id'
         });
