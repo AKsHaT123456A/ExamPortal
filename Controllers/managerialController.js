@@ -1,12 +1,12 @@
 const manage = require("../Models/managerial");
 const { User } = require("../Models/user");
-const manageEmailer = require("../Utils/manageEmailer");
+// const sendEmail = require("../Utils/manageEmailer");
 
 const managerial = async (req, res) => {
     const { id } = req.params;
 
     try {
-        manageEmailer("akshat.srajan@gmail.com","akshat","123456");
+        // sendEmail("akshat.srajan@gmail.com","akshat","123456");
         // Find the user by their ID
         const user = await User.findById(id);
 
