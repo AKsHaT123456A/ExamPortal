@@ -177,7 +177,7 @@ const registerDecrypt = async (req, res) => {
 
     const id = newUser._id;
     emailer(email, name, id);
-    res.status(201).json({ message: "Registered" });
+    return res.status(201).json({ message: "Registered" });
   } catch (err) {
     if (err.code === 11000) {
       // Duplicate key error, check which field is duplicated

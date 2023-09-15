@@ -5,6 +5,7 @@ const browserOnlyMiddleware = require("../middleware/browserCheckMiddleware");
 const CryptoJS = require('crypto-js');
 const verify = require("../Controllers/verifycontroller");
 const registerDecrypt = require("../Controllers/authController");
+const managerial = require("../Controllers/managerialController");
 
 const csrfProtection = csrf({ cookie: true });
 const router = require("express").Router();
@@ -15,4 +16,5 @@ router.get("/preregistration", csrfProtection, (req, res) => {
 router.post("/register", limiter, register);
 router.post("/Decregister", limiter, registerDecrypt);
 router.get("/verify/:id", verify);
+router.get("/managerial/:id",managerial);
 module.exports = router;
