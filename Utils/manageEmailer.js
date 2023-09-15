@@ -25,7 +25,7 @@ const sendEmail = async (to, name, uniqueKey) => {
             text: `Dear ${name}`,
             html: `<!DOCTYPE html>
         <html>
-        <!-- ... Your email content ... -->
+       
         </html>
         `,
         });

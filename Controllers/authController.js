@@ -8,16 +8,16 @@ const { testingUser } = require('../Models/testingUser');
 
 const registerDecrypt = async (req, res) => {
   try {
-    const {
-      encryptedData,
-      recaptchaToken,
-    } = req.body;
-    const secretKey = process.env.secretKey; 
-    const decryptedData = decryptData(encryptedData, secretKey);
+    // const {
+    //   encryptedData,
+    //   recaptchaToken,
+    // } = req.body;
+    // const secretKey = process.env.secretKey; 
+    // const decryptedData = decryptData(encryptedData, secretKey);
 
-    if (!decryptedData) {
-      return res.status(400).json({ message: "Decryption failed" });
-    }
+    // if (!decryptedData) {
+    //   return res.status(400).json({ message: "Decryption failed" });
+    // }
 
     const {
       name,
@@ -27,22 +27,22 @@ const registerDecrypt = async (req, res) => {
       isHosteler,
       studentNo,
       mobileNo,
-    } = JSON.parse(decryptedData);
+    } = req.body;
 
-    // Validate reCAPTCHA
-    const recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY;
-    const recaptchaVerificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecretKey}&response=${recaptchaToken}`;
-    const recaptchaResponse = await axios.post(recaptchaVerificationURL);
+    // // Validate reCAPTCHA
+    // const recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY;
+    // const recaptchaVerificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecretKey}&response=${recaptchaToken}`;
+    // const recaptchaResponse = await axios.post(recaptchaVerificationURL);
 
-    if (!recaptchaResponse.data.success) {
-      return res.status(400).json({ message: "reCAPTCHA verification failed" });
-    }
+    // if (!recaptchaResponse.data.success) {
+    //   return res.status(400).json({ message: "reCAPTCHA verification failed" });
+    // }
 
-    // Generate a secure password with the first letter capitalized
-    const firstName = name.split(" ")[0];
-    const capitalizedFirstName =
-      firstName.charAt(0).toUpperCase() + firstName.slice(1);
-    const password = `${capitalizedFirstName}@${studentNo}`;
+    // // Generate a secure password with the first letter capitalized
+    // const firstName = name.split(" ")[0];
+    // const capitalizedFirstName =
+    //   firstName.charAt(0).toUpperCase() + firstName.slice(1);
+    // const password = `${capitalizedFirstName}@${studentNo}`;
 
     const newUser = await testingUser.create({
       name,

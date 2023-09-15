@@ -6,8 +6,6 @@ const managerial = async (req, res) => {
     const { id } = req.params;
 
     try {
-        // sendEmail("akshat.srajan@gmail.com","akshat","123456");
-        // Find the user by their ID
         const user = await User.findById(id);
 
         if (!user) {
