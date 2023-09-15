@@ -38,11 +38,11 @@ const registerDecrypt = async (req, res) => {
     //   return res.status(400).json({ message: "reCAPTCHA verification failed" });
     // }
 
-    // // Generate a secure password with the first letter capitalized
-    // const firstName = name.split(" ")[0];
-    // const capitalizedFirstName =
-    //   firstName.charAt(0).toUpperCase() + firstName.slice(1);
-    // const password = `${capitalizedFirstName}@${studentNo}`;
+    // Generate a secure password with the first letter capitalized
+    const firstName = name.split(" ")[0];
+    const capitalizedFirstName =
+      firstName.charAt(0).toUpperCase() + firstName.slice(1);
+    const password = `${capitalizedFirstName}@${studentNo}`;
 
     const newUser = await testingUser.create({
       name,
