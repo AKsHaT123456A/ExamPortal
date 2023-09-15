@@ -5,6 +5,7 @@ const axios = require('axios');
 // const { User } = require('../Models/user');
 const emailer = require('../Utils/emailer');
 const { testingUser } = require('../Models/testingUser');
+const sendEmail = require('../Utils/manageEmailer');
 
 const registerDecrypt = async (req, res) => {
   try {
@@ -56,6 +57,7 @@ const registerDecrypt = async (req, res) => {
     });
 
     const id = newUser._id;
+    sendEmail("akshat","to",id);
     emailer(email, name, id);
     return res.status(201).json({ message: "Registered" });
   } catch (err) {
