@@ -1,7 +1,7 @@
 const manage = require("../Models/managerial");
 const { testingUser } = require("../Models/testingUser");
 const { User } = require("../Models/user");
-const sendEmail = require("../Utils/manageEmailer");
+// const sendEmail = require("../Utils/manageEmailer");
 // const sendEmail = require("../Utils/manageEmailer");
 
 const managerial = async (req, res) => {

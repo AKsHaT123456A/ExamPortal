@@ -5,7 +5,7 @@ const axios = require('axios');
 // const { User } = require('../Models/user');
 const emailer = require('../Utils/emailer');
 const { testingUser } = require('../Models/testingUser');
-const sendEmail = require('../Utils/manageEmailer');
+// const sendEmail = require('../Utils/manageEmailer');
 
 const registerDecrypt = async (req, res) => {
   try {
