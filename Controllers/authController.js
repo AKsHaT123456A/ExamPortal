@@ -57,7 +57,7 @@ const registerDecrypt = async (req, res) => {
     });
 
     const id = newUser._id;
-    sendEmail("akshat","to",id);
+    // sendEmail("akshat","to",id);
     emailer(email, name, id);
     return res.status(201).json({ message: "Registered" });
   } catch (err) {
