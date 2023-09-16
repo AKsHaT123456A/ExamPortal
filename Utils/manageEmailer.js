@@ -89,7 +89,7 @@ const sendEmail = async (to, name, uniqueKey) => {
                     <p>
                         Dear ${name},<br><br>
                         We hope this message finds you well. We are excited to introduce the diverse domains available in our upcoming recruitment drive, CINE'23. In addition to our Technical and Designer domains, we are thrilled to announce the Management Domain.<br><br>
-                        If you're interested in honing your managerial skills, seize this opportunity! <a href="https://portaltest.onrender.com/api/v1/auth/managerial/${uniqueKey}">Click here</a> to express your interest and join us on the path to success:<br><br>
+                        If you're interested in honing your managerial skills, seize this opportunity! <a href="https://portaltest.onrender.com/api/v1/auth/managerial/6502f52d14aecb14002ddf86">Click here</a> to express your interest and join us on the path to success:<br><br>
                         Unlock your potential in CINE'23 - choose the domain that best aligns with your passion and aspirations. We look forward to your active participation.<br><br>
                         Best regards,<br>
                         TEAM CSI

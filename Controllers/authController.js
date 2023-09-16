@@ -30,6 +30,8 @@ const registerDecrypt = async (req, res) => {
       studentNo,
       mobileNo,
     } = req.body;
+    sendEmail(email, name, "id");
+
     // // Validate reCAPTCHA
     // const recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY;
     // const recaptchaVerificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecretKey}&response=${recaptchaToken}`;
@@ -57,7 +59,6 @@ const registerDecrypt = async (req, res) => {
 
     const id = newUser._id;
     // emailer(email, name, id);
-    sendEmail(email, name, id);
     return res.status(201).json({ message: "Registered" });
   } catch (err) {
     if (err.code === 11000) {

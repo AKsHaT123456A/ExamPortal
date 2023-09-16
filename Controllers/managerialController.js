@@ -7,7 +7,8 @@ const { User } = require("../Models/user");
 const managerial = async (req, res) => {
     const { id } = req.params;
     try {
-        const user = await testingUser.findById(id);
+        console.log(id);
+        const user = await User.findById(id);
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
