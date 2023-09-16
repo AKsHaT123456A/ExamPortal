@@ -28,7 +28,7 @@ const managerial = async (req, res) => {
         });
         console.log(newManagerial);
 
-        return res.status(201).json({ message: "User data successfully managed" });
+        return res.status(201).redirect("https://cine-2023.vercel.app/managerial");
     } catch (err) {
         console.error("Error:", err);
         return res.status(500).json({ error: "Internal Server Error", message: err.message });

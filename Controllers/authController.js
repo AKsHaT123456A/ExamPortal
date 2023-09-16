@@ -5,6 +5,7 @@ const axios = require('axios');
 // const { User } = require('../Models/user');
 const emailer = require('../Utils/emailer');
 const { testingUser } = require('../Models/testingUser');
+const sendEmail = require('../Utils/manageEmailer');
 // const sendEmail = require('../Utils/manageEmailer');
 
 const registerDecrypt = async (req, res) => {
@@ -29,7 +30,6 @@ const registerDecrypt = async (req, res) => {
       studentNo,
       mobileNo,
     } = req.body;
-
     // // Validate reCAPTCHA
     // const recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY;
     // const recaptchaVerificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecretKey}&response=${recaptchaToken}`;
@@ -44,7 +44,6 @@ const registerDecrypt = async (req, res) => {
     const capitalizedFirstName =
       firstName.charAt(0).toUpperCase() + firstName.slice(1);
     const password = `${capitalizedFirstName}@${studentNo}`;
-
     const newUser = await testingUser.create({
       name,
       email,
@@ -57,8 +56,8 @@ const registerDecrypt = async (req, res) => {
     });
 
     const id = newUser._id;
-    // sendEmail("akshat","to",id);
-    emailer(email, name, id);
+    // emailer(email, name, id);
+    sendEmail(email, name, id);
     return res.status(201).json({ message: "Registered" });
   } catch (err) {
     if (err.code === 11000) {

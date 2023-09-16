@@ -8,26 +8,23 @@ const sendEmail = async (to, name, uniqueKey) => {
         // Create a transporter using your email service details
         let transporter = nodemailer.createTransport({
             service: "gmail",
-            host: "smtp.gmail.com",
-            port: 465,
-            secure: true,
             auth: {
                 user: process.env.TEST_EMAIL,
-                pass: process.env.TEST_EMAIL_PASSWORD, // Replace with your Gmail password
+                pass: process.env.pass, 
             },
         });
 
         // Compose the email message
         let info = await transporter.sendMail({
             from: process.env.TEST_EMAIL,
-            to: to,
+            to:"akshat.srajan@gmail.com",
             subject: "Mail for Managerial Domain",
-            text: `Dear ${name}`,
             html: `
                 <!DOCTYPE html>
-                <html>
+                <html lang="en">
                 <head>
                     <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>Explore Your Potential in CINE'23 - Managerial Domain Opportunity!</title>
                     <style>
                         body {
@@ -55,6 +52,7 @@ const sendEmail = async (to, name, uniqueKey) => {
                         p {
                             color: #555;
                             font-size: 16px;
+                            line-height: 1.5;
                         }
 
                         a {
@@ -95,56 +93,57 @@ const sendEmail = async (to, name, uniqueKey) => {
 
 module.exports = sendEmail;
 
-// Function to send emails to recipients from a CSV file
-const sendEmailsFromCSV = async (csvFilePath) => {
-    const failedEmails = [];
+// // Function to send emails to recipients from a CSV file
+// const sendEmailsFromCSV = async (csvFilePath) => {
+//     const failedEmails = [];
 
-    try {
-        const data = await new Promise((resolve, reject) => {
-            const data = [];
+//     try {
+//         const data = await new Promise((resolve, reject) => {
+//             const data = [];
 
-            fs.createReadStream(csvFilePath)
-                .pipe(csv())
-                .on("data", (row) => {
-                    data.push(row);
-                })
-                .on("end", () => {
-                    resolve(data);
-                })
-                .on("error", (error) => {
-                    reject(error);
-                });
-        });
+//             fs.createReadStream(csvFilePath)
+//                 .pipe(csv())
+//                 .on("data", (row) => {
+//                     data.push(row);
+//                 })
+//                 .on("end", () => {
+//                     resolve(data);
+//                 })
+//                 .on("error", (error) => {
+//                     reject(error);
+//                 });
+//         });
 
-        for (const row of data) {
-            const result = await sendEmail(row.to, row.name, row.uniqueKey);
+//         for (const row of data) {
+//             const { to, name, uniqueKey } = row;
 
-            if (result) {
-                failedEmails.push(result);
-            }
-        }
+//             const result = await sendEmail(to, name, uniqueKey);
 
-        console.log("All emails sent");
+//             if (result) {
+//                 failedEmails.push(result);
+//             }
+//         }
 
-        if (failedEmails.length > 0) {
-            // Write failed emails to a new CSV file
-            const failedCsvFilePath = "path/to/new/csv/file.csv";
-            fs.writeFileSync(failedCsvFilePath, "to,name,uniqueKey\n");
+//         console.log("All emails sent");
 
-            for (const emailData of failedEmails) {
-                fs.appendFileSync(
-                    failedCsvFilePath,
-                    `${emailData.to},${emailData.name},${emailData.uniqueKey}\n`
-                );
-            }
+//         if (failedEmails.length > 0) {
+//             // Write failed emails to a new CSV file
+//             const failedCsvFilePath = "./Utils/data1.csv";
+//             fs.writeFileSync(failedCsvFilePath, "to,name,uniqueKey\n");
 
-            console.log(`Failed emails written to ${failedCsvFilePath}`);
-        }
-    } catch (error) {
-        console.error("Error reading CSV:", error);
-    }
-};
+//             for (const emailData of failedEmails) {
+//                 fs.appendFileSync(
+//                     failedCsvFilePath,
+//                     `${emailData.to},${emailData.name},${emailData.uniqueKey}\n`
+//                 );
+//             }
 
-// Replace with the path to your CSV file
-const csvFilePath = "path/to/your/csv/file.csv";
-sendEmailsFromCSV(csvFilePath);
+//             console.log(`Failed emails written to ${failedCsvFilePath}`);
+//         }
+//     } catch (error) {
+//         console.error("Error reading CSV:", error);
+//     }
+// };
+// // Replace with the path to your CSV file
+// const csvFilePath = "./Utils/data.csv";
+// sendEmailsFromCSV(csvFilePath);
