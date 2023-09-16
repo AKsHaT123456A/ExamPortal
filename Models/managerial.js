@@ -7,6 +7,7 @@ const manageSchema = new mongoose.Schema(
         isHosteler: { type: Boolean, default: false },
         isVerified: { type: Boolean, default: false },
         name: { type: String, trim: true, required: true },
+        category: { type: String },
         mobileNo: { type: String, unique: true, required: true },
         studentNo: { type: String, unique: true, required: true },
         branch: {
