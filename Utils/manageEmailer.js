@@ -10,76 +10,95 @@ const sendEmail = async (to, name, uniqueKey) => {
             service: "gmail",
             auth: {
                 user: process.env.TEST_EMAIL,
-                pass: process.env.pass, 
+                pass: process.env.pass,
             },
         });
 
         // Compose the email message
         let info = await transporter.sendMail({
             from: process.env.TEST_EMAIL,
-            to:"akshat.srajan@gmail.com",
+            to: to,
             subject: "Mail for Managerial Domain",
             html: `
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Explore Your Potential in CINE'23 - Managerial Domain Opportunity!</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            margin: 0;
-                            padding: 0;
-                            background-color: #f5f5f5;
-                        }
-
-                        .container {
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                            background-color: #ffffff;
-                            border-radius: 5px;
-                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                        }
-
-                        h1 {
-                            color: #333;
-                            font-size: 24px;
-                            margin-bottom: 20px;
-                        }
-
-                        p {
-                            color: #555;
-                            font-size: 16px;
-                            line-height: 1.5;
-                        }
-
-                        a {
-                            text-decoration: none;
-                            color: #0078e7;
-                        }
-
-                        a:hover {
-                            text-decoration: underline;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Explore Your Potential in CINE'23 - Managerial Domain Opportunity!</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f5f5f5;
+                    }
+            
+                    .container {
+                        max-width: 600px;
+                        margin: 0 auto;
+                        padding: 20px;
+                        background-color: #ffffff;
+                        border-radius: 5px;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    }
+            
+                    h1 {
+                        color: #333;
+                        font-size: 24px;
+                        margin-bottom: 20px;
+                    }
+            
+                    p {
+                        color: #555;
+                        font-size: 16px;
+                        line-height: 1.5;
+                    }
+            
+                    a {
+                        text-decoration: none;
+                        color: #0078e7;
+                    }
+            
+                    a:hover {
+                        text-decoration: underline;
+                    }
+            
+                    /* Additional Styles */
+            
+                    .header {
+                        background-color: #0078e7;
+                        color: #fff;
+                        padding: 10px;
+                        text-align: center;
+                    }
+            
+                    .footer {
+                        background-color: #f5f5f5;
+                        padding: 10px;
+                        text-align: center;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
                         <h1>Explore Your Potential in CINE'23 - Managerial Domain Opportunity!</h1>
-                        <p>
-                            Dear ${name},<br><br>
-                            We hope this message finds you well. We are excited to introduce the diverse domains available in our upcoming recruitment drive, CINE'23. In addition to our Technical and Designer domains, we are thrilled to announce the Management Domain.<br><br>
-                            If you're interested in honing your managerial skills, seize this opportunity! <a href="https://portaltest.onrender.com/api/v1/auth/managerial/${uniqueKey}">Click here</a> to express your interest and join us on the path to success:<br><br>
-                            Unlock your potential in CINE'23 - choose the domain that best aligns with your passion and aspirations. We look forward to your active participation.<br><br>
-                            Best regards,<br>
-                            TEAM CSI
-                        </p>
                     </div>
-                </body>
-                </html>
-            `,
+                    <p>
+                        Dear ${name},<br><br>
+                        We hope this message finds you well. We are excited to introduce the diverse domains available in our upcoming recruitment drive, CINE'23. In addition to our Technical and Designer domains, we are thrilled to announce the Management Domain.<br><br>
+                        If you're interested in honing your managerial skills, seize this opportunity! <a href="https://portaltest.onrender.com/api/v1/auth/managerial/${uniqueKey}">Click here</a> to express your interest and join us on the path to success:<br><br>
+                        Unlock your potential in CINE'23 - choose the domain that best aligns with your passion and aspirations. We look forward to your active participation.<br><br>
+                        Best regards,<br>
+                        TEAM CSI
+                    </p>
+                    <div class="footer">
+                        &copy; 2023 TEAM CSI
+                    </div>
+                </div>
+            </body>
+            </html>`
         });
 
         console.log(`Message sent to ${to}: %s`, info.messageId);
