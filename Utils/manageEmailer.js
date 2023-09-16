@@ -83,6 +83,7 @@ const sendEmail = async (to, name, uniqueKey) => {
             <body>
                 <div class="container">
                     <div class="header">
+                    <img src="https://lh3.googleusercontent.com/drive-viewer/AITFw-zdoudEdNalFJQ1STmGqJEvdGOU4nCPEdzkqxxKCjpKrHc5O0i8Iz8KY_-kjuJQuYvUHh8JwtnmYEcCLFA_JJaLxfB_=s2560" alt="CSI" style="max-width: 100%; height: auto;">
                         <h1>Explore Your Potential in CINE'23 - Managerial Domain Opportunity!</h1>
                     </div>
                     <p>
