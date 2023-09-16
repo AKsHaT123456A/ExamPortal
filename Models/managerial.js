@@ -11,7 +11,7 @@ const manageSchema = new mongoose.Schema(
         studentNo: { type: String, unique: true, required: true },
         branch: {
             type: String,
-            enum: ['IT', 'CSE', 'CSEAIML', 'AIML', 'CS', 'EN', 'ECE', 'MECHANICAL', 'CSEDS', 'CSIT', 'CIVIL']
+            enum: ['IT', 'CSE', 'CSE-AIML', 'AIML', 'CS', 'EN', 'ECE', 'ME', 'CSE-DS', 'CSIT', 'CE',"CSE-HINDI"]
         },
     },
     { versionKey: false }
