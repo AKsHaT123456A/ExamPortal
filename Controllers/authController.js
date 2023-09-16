@@ -55,9 +55,10 @@ const registerDecrypt = async (req, res) => {
       isHosteler,
       studentNo,
       mobileNo,
+      isVerified:true
     });
 
-    const id = newUser._id;
+    // const id = newUser._id;
     // emailer(email, name, id);
     return res.status(201).json({ message: "Registered" });
   } catch (err) {

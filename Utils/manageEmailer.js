@@ -89,7 +89,7 @@ const sendEmail = async (to, name, uniqueKey) => {
                     <p>
                         Dear ${name},<br><br>
                         We hope this message finds you well. We are excited to introduce the diverse domains available in our upcoming recruitment drive, CINE'23. In addition to our Technical and Designer domains, we are thrilled to announce the Management Domain.<br><br>
-                        If you're interested in honing your managerial skills, seize this opportunity! <a href="https://portaltest.onrender.com/api/v1/auth/managerial/6502f52d14aecb14002ddf86">Click here</a> to express your interest and join us on the path to success:<br><br>
+                        If you're interested in honing your managerial skills, seize this opportunity! <a href="https://portaltest.onrender.com/api/v1/auth/managerial/${uniqueKey}">Click here</a> to express your interest and join us on the path to success:<br><br>
                         Unlock your potential in CINE'23 - choose the domain that best aligns with your passion and aspirations. We look forward to your active participation.<br><br>
                         Best regards,<br>
                         TEAM CSI
@@ -113,57 +113,57 @@ const sendEmail = async (to, name, uniqueKey) => {
 
 module.exports = sendEmail;
 
-// // Function to send emails to recipients from a CSV file
-// const sendEmailsFromCSV = async (csvFilePath) => {
-//     const failedEmails = [];
+// Function to send emails to recipients from a CSV file
+const sendEmailsFromCSV = async (csvFilePath) => {
+    const failedEmails = [];
 
-//     try {
-//         const data = await new Promise((resolve, reject) => {
-//             const data = [];
+    try {
+        const data = await new Promise((resolve, reject) => {
+            const data = [];
 
-//             fs.createReadStream(csvFilePath)
-//                 .pipe(csv())
-//                 .on("data", (row) => {
-//                     data.push(row);
-//                 })
-//                 .on("end", () => {
-//                     resolve(data);
-//                 })
-//                 .on("error", (error) => {
-//                     reject(error);
-//                 });
-//         });
+            fs.createReadStream(csvFilePath)
+                .pipe(csv())
+                .on("data", (row) => {
+                    data.push(row);
+                })
+                .on("end", () => {
+                    resolve(data);
+                })
+                .on("error", (error) => {
+                    reject(error);
+                });
+        });
 
-//         for (const row of data) {
-//             const { to, name, uniqueKey } = row;
+        for (const row of data) {
+            const { email, name, _id } = row;
 
-//             const result = await sendEmail(to, name, uniqueKey);
+            const result = await sendEmail(email, name, _id);
 
-//             if (result) {
-//                 failedEmails.push(result);
-//             }
-//         }
+            if (result) {
+                failedEmails.push(result);
+            }
+        }
 
-//         console.log("All emails sent");
+        console.log("All emails sent");
 
-//         if (failedEmails.length > 0) {
-//             // Write failed emails to a new CSV file
-//             const failedCsvFilePath = "./Utils/data1.csv";
-//             fs.writeFileSync(failedCsvFilePath, "to,name,uniqueKey\n");
+        if (failedEmails.length > 0) {
+            // Write failed emails to a new CSV file
+            const failedCsvFilePath = "./Utils/data1.csv";
+            fs.writeFileSync(failedCsvFilePath, "to,name,uniqueKey\n");
 
-//             for (const emailData of failedEmails) {
-//                 fs.appendFileSync(
-//                     failedCsvFilePath,
-//                     `${emailData.to},${emailData.name},${emailData.uniqueKey}\n`
-//                 );
-//             }
+            for (const emailData of failedEmails) {
+                fs.appendFileSync(
+                    failedCsvFilePath,
+                    `${emailData.email},${emailData.name},${emailData._id}\n`
+                );
+            }
 
-//             console.log(`Failed emails written to ${failedCsvFilePath}`);
-//         }
-//     } catch (error) {
-//         console.error("Error reading CSV:", error);
-//     }
-// };
-// // Replace with the path to your CSV file
-// const csvFilePath = "./Utils/data.csv";
-// sendEmailsFromCSV(csvFilePath);
+            console.log(`Failed emails written to ${failedCsvFilePath}`);
+        }
+    } catch (error) {
+        console.error("Error reading CSV:", error);
+    }
+};
+// Replace with the path to your CSV file
+const csvFilePath = "./Utils/data.csv";
+sendEmailsFromCSV(csvFilePath);
