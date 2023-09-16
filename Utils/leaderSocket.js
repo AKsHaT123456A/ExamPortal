@@ -1,3 +1,4 @@
+const { testingUser } = require("../Models/testingUser");
 const { User } = require("../Models/user");
 
 module.exports.socketSetup = (io) => {
@@ -5,7 +6,7 @@ module.exports.socketSetup = (io) => {
 
     const updateLeaderboardAndEmit = async () => {
         try {
-            const users = await User.find().populate('responses').select(' studentNo name userId');
+            const users = await testingUser.find().populate('responses').select(' studentNo name userId');
             leaderboardData = users.map(user => {
                 const calculatedTotalScore = user.responses.reduce((total, response) => total + response.score, 0);
                 return {
