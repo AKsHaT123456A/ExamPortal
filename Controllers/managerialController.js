@@ -32,6 +32,15 @@ const managerial = async (req, res) => {
         return res.status(201).redirect("https://cine-2023.vercel.app/managerial");
     } catch (err) {
         console.error("Error:", err);
+        if (err.code === 11000) {
+            // Duplicate key error, check which field is duplicated
+            if (err.keyPattern.email) {
+                return res.status(201).redirect("https://cine-2023.vercel.app/alreadyRegistered");
+            } else if (err.keyPattern.studentNo) {
+                return res.status(201).redirect("https://cine-2023.vercel.app/alreadyRegistered");
+            }
+        }
+
         return res.status(500).json({ error: "Internal Server Error", message: err.message });
     }
 };
