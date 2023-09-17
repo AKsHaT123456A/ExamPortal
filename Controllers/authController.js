@@ -1,11 +1,10 @@
-
-// module.exports = register 
-const CryptoJS = require('crypto-js'); // Add this import
-const axios = require('axios');
-// const { User } = require('../Models/user');
-const emailer = require('../Utils/emailer');
-const { testingUser } = require('../Models/testingUser');
-const sendEmail = require('../Utils/manageEmailer');
+// module.exports = register
+const CryptoJS = require("crypto-js"); // Add this import
+const axios = require("axios");
+const { User } = require("../Models/user");
+const emailer = require("../Utils/emailer");
+// const { User } = require('../Models/User');
+const sendEmail = require("../Utils/manageEmailer");
 // const sendEmail = require('../Utils/manageEmailer');
 
 const registerDecrypt = async (req, res) => {
@@ -14,22 +13,15 @@ const registerDecrypt = async (req, res) => {
     //   encryptedData,
     //   recaptchaToken,
     // } = req.body;
-    // const secretKey = process.env.secretKey; 
+    // const secretKey = process.env.secretKey;
     // const decryptedData = decryptData(encryptedData, secretKey);
 
     // if (!decryptedData) {
     //   return res.status(400).json({ message: "Decryption failed" });
     // }
 
-    const {
-      name,
-      email,
-      branch,
-      gender,
-      isHosteler,
-      studentNo,
-      mobileNo,
-    } = req.body;
+    const { name, email, branch, gender, isHosteler, studentNo, mobileNo } =
+      req.body;
 
     // // Validate reCAPTCHA
     // const recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY;
@@ -45,7 +37,7 @@ const registerDecrypt = async (req, res) => {
     const capitalizedFirstName =
       firstName.charAt(0).toUpperCase() + firstName.slice(1);
     const password = `${capitalizedFirstName}@${studentNo}`;
-    const newUser = await testingUser.create({
+    const newUser = await User.create({
       name,
       email,
       password,
@@ -54,7 +46,7 @@ const registerDecrypt = async (req, res) => {
       isHosteler,
       studentNo,
       mobileNo,
-      isVerified:true
+      isVerified: true,
     });
 
     const id = newUser._id;
@@ -67,12 +59,16 @@ const registerDecrypt = async (req, res) => {
       if (err.keyPattern.email) {
         return res.status(401).json({ message: "Email already exists" });
       } else if (err.keyPattern.studentNo) {
-        return res.status(401).json({ message: "Student number already exists" });
+        return res
+          .status(401)
+          .json({ message: "Student number already exists" });
       }
     }
 
     console.error("Registration Error:", err);
-    res.status(500).json({ message: "Registration failed", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Registration failed", error: err.message });
   }
 };
 
@@ -83,7 +79,7 @@ const decryptData = (encryptedData, secretKey) => {
     const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
     return decryptedData;
   } catch (error) {
-    console.error('Decryption error:', error);
+    console.error("Decryption error:", error);
     return null; // Handle the error as needed
   }
 };
