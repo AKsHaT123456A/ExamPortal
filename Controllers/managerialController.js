@@ -1,3 +1,4 @@
+const { day2 } = require("../Models/day2");
 const manage = require("../Models/managerial");
 const { testingUser } = require("../Models/testingUser");
 const { User } = require("../Models/user");
@@ -17,7 +18,7 @@ const managerial = async (req, res) => {
         // Extract user properties
         const { name, email, studentNo, mobileNo, gender, branch, isVerified, isHosteler } = user;
 
-        const newManagerial = await manage.create({
+        const newManagerial = await day2.create({
             name,
             email,
             studentNo,
@@ -29,15 +30,15 @@ const managerial = async (req, res) => {
         });
         console.log(newManagerial);
 
-        return res.status(201).redirect("https://cine-2023.vercel.app/managerial");
+        return res.status(201).redirect(`https://cine-2023.vercel.app/${id}`);
     } catch (err) {
         console.error("Error:", err);
         if (err.code === 11000) {
             // Duplicate key error, check which field is duplicated
             if (err.keyPattern.email) {
-                return res.status(201).redirect("https://cine-2023.vercel.app/alreadyReg");
+                return res.status(201).redirect("https://cine-2023.vercel.app/alreadyRegistered");
             } else if (err.keyPattern.studentNo) {
-                return res.status(201).redirect("https://cine-2023.vercel.app/managerial");
+                return res.status(201).redirect("https://cine-2023.vercel.app/alreadyRegistered");
             }
         }
 
