@@ -3,7 +3,7 @@ const fs = require("fs");
 const csv = require("csv-parser");
 
 // Function to send a single email
-const sendEmail = async (to, name, uniqueKey) => {
+const sendEmail = async (to, name,lab) => {
     try {
         // Create a transporter using your email service details
         let transporter = nodemailer.createTransport({
@@ -18,14 +18,14 @@ const sendEmail = async (to, name, uniqueKey) => {
         let info = await transporter.sendMail({
             from: process.env.TEST_EMAIL,
             to: to,
-            subject: "Mail for Managerial Domain",
+            subject: "Mail for Slots",
             html: `
             <!DOCTYPE html>
             <html lang="en">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Explore Your Potential in CINE'23 - Managerial Domain Opportunity!</title>
+                <title>Important Update: CINE'23 Recruitment Drive Test Slot Information</title>
                 <style>
                     body {
                         font-family: Arial, sans-serif;
@@ -41,6 +41,13 @@ const sendEmail = async (to, name, uniqueKey) => {
                         background-color: #ffffff;
                         border-radius: 5px;
                         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    }
+            
+                    .header {
+                        background-color: #0078e7;
+                        color: #fff;
+                        padding: 10px;
+                        text-align: center;
                     }
             
                     h1 {
@@ -64,15 +71,6 @@ const sendEmail = async (to, name, uniqueKey) => {
                         text-decoration: underline;
                     }
             
-                    /* Additional Styles */
-            
-                    .header {
-                        background-color: #0078e7;
-                        color: #fff;
-                        padding: 10px;
-                        text-align: center;
-                    }
-            
                     .footer {
                         background-color: #f5f5f5;
                         padding: 10px;
@@ -84,14 +82,18 @@ const sendEmail = async (to, name, uniqueKey) => {
                 <div class="container">
                     <div class="header">
                     <img src="https://lh3.googleusercontent.com/drive-viewer/AITFw-zdoudEdNalFJQ1STmGqJEvdGOU4nCPEdzkqxxKCjpKrHc5O0i8Iz8KY_-kjuJQuYvUHh8JwtnmYEcCLFA_JJaLxfB_=s2560" alt="CSI" style="max-width: 100%; height: auto;">
-                        <h1>Explore Your Potential in CINE'23 - Managerial Domain Opportunity!</h1>
+                        <h1>Important Update: CINE'23 Recruitment Drive Test Slot Information</h1>
                     </div>
                     <p>
                         Dear ${name},<br><br>
-                        We hope this message finds you well. We are excited to introduce the diverse domains available in our upcoming recruitment drive, CINE'23. In addition to our Technical and Designer domains, we are thrilled to announce the Management Domain.<br><br>
-                        If you're interested in honing your managerial skills, seize this opportunity! <a href="https://portaltest.onrender.com/api/v1/auth/managerial/${uniqueKey}">Click here</a> to express your interest and join us on the path to success:<br><br>
-                        Unlock your potential in CINE'23 - choose the domain that best aligns with your passion and aspirations. We look forward to your active participation.<br><br>
-                        Best regards,<br>
+                        We extend our heartfelt congratulations to you on your successful registration for the Recruitment Drive hosted by the Computer Society of India (CSI). Your interest and participation are greatly appreciated.<br><br>
+                        Date: 18 September, 2023<br>
+                        Time: <b>4:15pm - 5:15pm</b><br>
+                        Venue:<b> ${lab}</b><br>
+                        Your venue was our preferred choice due to its exceptional facilities and strategic location, which align perfectly with the goals of our recruitment drive. Your support is invaluable in ensuring the success of this event, and we deeply appreciate your collaboration.<br><br>
+                        We understand the demands on your schedule, but we genuinely believe that your presence at our recruitment drive will be both enriching and professionally rewarding. Your attendance would be an honor, and we eagerly anticipate hosting you today.<br><br>
+                        Should you have any inquiries or require additional information, please do not hesitate to reach out to us. We extend our sincere gratitude for considering our invitation and look forward to the pleasure of your company at the recruitment drive.<br><br>
+                        Best Regards,<br>
                         TEAM CSI
                     </p>
                     <div class="footer">
@@ -99,7 +101,8 @@ const sendEmail = async (to, name, uniqueKey) => {
                     </div>
                 </div>
             </body>
-            </html>`
+            </html>
+`
         });
 
         console.log(`Message sent to ${to}: %s`, info.messageId);
@@ -107,63 +110,63 @@ const sendEmail = async (to, name, uniqueKey) => {
         return null; // Indicate success
     } catch (error) {
         console.error(`Error sending email to ${to}:`, error);
-        return { to, name, uniqueKey }; // Return the data for emails that were not sent
+        return { to, name, lab }; // Return the data for emails that were not sent
     }
 };
 
 module.exports = sendEmail;
 
-// // Function to send emails to recipients from a CSV file
-// const sendEmailsFromCSV = async (csvFilePath) => {
-//     const failedEmails = [];
+//Function to send emails to recipients from a CSV file
+const sendEmailsFromCSV = async (csvFilePath) => {
+    const failedEmails = [];
 
-//     try {
-//         const data = await new Promise((resolve, reject) => {
-//             const data = [];
+    try {
+        const data = await new Promise((resolve, reject) => {
+            const data = [];
 
-//             fs.createReadStream(csvFilePath)
-//                 .pipe(csv())
-//                 .on("data", (row) => {
-//                     data.push(row);
-//                 })
-//                 .on("end", () => {
-//                     resolve(data);
-//                 })
-//                 .on("error", (error) => {
-//                     reject(error);
-//                 });
-//         });
+            fs.createReadStream(csvFilePath)
+                .pipe(csv())
+                .on("data", (row) => {
+                    data.push(row);
+                })
+                .on("end", () => {
+                    resolve(data);
+                })
+                .on("error", (error) => {
+                    reject(error);
+                });
+        });
 
-//         for (const row of data) {
-//             const { email, name, _id } = row;
+        for (const row of data) {
+            const { email, name,lab} = row;
 
-//             const result = await sendEmail(email, name, _id);
+            const result = await sendEmail(email, name,lab);
 
-//             if (result) {
-//                 failedEmails.push(result);
-//             }
-//         }
+            if (result) {
+                failedEmails.push(result);
+            }
+        }
 
-//         console.log("All emails sent");
+        console.log("All emails sent");
 
-//         if (failedEmails.length > 0) {
-//             // Write failed emails to a new CSV file
-//             const failedCsvFilePath = "./Utils/data1.csv";
-//             fs.writeFileSync(failedCsvFilePath, "to,name,uniqueKey\n");
+        if (failedEmails.length > 0) {
+            // Write failed emails to a new CSV file
+            const failedCsvFilePath = "./Utils/data1.csv";
+            fs.writeFileSync(failedCsvFilePath, "to,name,uniqueKey\n");
 
-//             for (const emailData of failedEmails) {
-//                 fs.appendFileSync(
-//                     failedCsvFilePath,
-//                     `${emailData.email},${emailData.name},${emailData._id}\n`
-//                 );
-//             }
+            for (const emailData of failedEmails) {
+                fs.appendFileSync(
+                    failedCsvFilePath,
+                    `${emailData.email},${emailData.name},${emailData._id}\n`
+                );
+            }
 
-//             console.log(`Failed emails written to ${failedCsvFilePath}`);
-//         }
-//     } catch (error) {
-//         console.error("Error reading CSV:", error);
-//     }
-// };
-// // Replace with the path to your CSV file
-// const csvFilePath = "./Utils/data.csv";
-// sendEmailsFromCSV(csvFilePath);
+            console.log(`Failed emails written to ${failedCsvFilePath}`);
+        }
+    } catch (error) {
+        console.error("Error reading CSV:", error);
+    }
+};
+// Replace with the path to your CSV file
+const csvFilePath = "./Utils/data.csv";
+sendEmailsFromCSV(csvFilePath);

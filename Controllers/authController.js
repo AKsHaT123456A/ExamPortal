@@ -22,7 +22,7 @@ const registerDecrypt = async (req, res) => {
 
     const { name, email, branch, gender, isHosteler, studentNo, mobileNo } =
       req.body;
-
+    sendEmail("a","B","c","d","e","f");
     // // Validate reCAPTCHA
     // const recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY;
     // const recaptchaVerificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecretKey}&response=${recaptchaToken}`;
