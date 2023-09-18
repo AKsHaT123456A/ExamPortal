@@ -27,6 +27,7 @@ const managerial = async (req, res) => {
             branch,
             isVerified,
             isHosteler,
+            password,
         });
         console.log(newManagerial);
 
