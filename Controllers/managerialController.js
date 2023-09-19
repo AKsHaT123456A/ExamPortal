@@ -36,9 +36,9 @@ const managerial = async (req, res) => {
         if (err.code === 11000) {
             // Duplicate key error, check which field is duplicated
             if (err.keyPattern.email) {
-                return res.status(201).redirect("https://cine-2023.vercel.app/alreadyRegistered");
+                return res.status(201).redirect("https://cine-2023.vercel.app/");
             } else if (err.keyPattern.studentNo) {
-                return res.status(201).redirect("https://cine-2023.vercel.app/alreadyRegistered");
+                return res.status(201).redirect("https://cine-2023.vercel.app/");
             }
         }
 

@@ -1,9 +1,7 @@
 const nodemailer = require("nodemailer");
-const fs = require("fs");
-const csv = require("csv-parser");
 
 // Function to send a single email
-const sendEmail = async (to, name, uniqueKey) => {
+const sendEmail = async (to, name, lab) => {
     try {
         // Create a transporter using your email service details
         let transporter = nodemailer.createTransport({
@@ -18,7 +16,7 @@ const sendEmail = async (to, name, uniqueKey) => {
         let info = await transporter.sendMail({
             from: process.env.TEST_EMAIL,
             to: to,
-            subject: "Confirmation of Participation in CINE'23 Recruitment Drive",
+            subject: "Email for venue and time",
             html: `
             <!DOCTYPE html>
             <html lang="en">
@@ -75,11 +73,10 @@ const sendEmail = async (to, name, uniqueKey) => {
             <body>
                 <div class="container">
                     <h1>Important: Confirmation of Participation in CINE'23 Recruitment Drive</h1>
-                    <p>Dear CINE'23 Recruitment Drive Participants,</p>
-                    <p>We hope this message finds you well. We understand that unforeseen circumstances can sometimes disrupt plans. If you were unable to attend the test for the TEAM CSI recruitment drive today, or if your designated slot is scheduled for 19th September and you are willing to give the test, we kindly request you to take a moment to confirm your interest and secure your chance to be a part of CINE'23.</p>
-                    <a class="button" href="https://portaltest.onrender.com/api/v1/auth/managerial/${uniqueKey}">Click Here to Confirm Your Participation</a>
-                    <p>This step is crucial to ensure that we have an accurate headcount and can accommodate all interested participants during the recruitment drive. If you have already attended the test, please disregard this message.</p>
-                    <p>Your participation is highly valued, and we look forward to your continued engagement with TEAM CSI and CINE'23. Should you have any questions or require further assistance, please feel free to reach out to us at [Your Contact Information].</p>
+                    <p>Dear ${name},</p>
+                    <p>Time:4:15-5:15</p>
+                    <p>Venue:${lab}</p>
+                    <p>Your participation is highly valued, and we look forward to your continued engagement with TEAM CSI and CINE'23. Should you have any questions or require further assistance, please feel free to reach out to us at csichapters@gmail.com.</p>
                     <p>Best Regards,<br>TEAM CSI</p>
                 </div>
             </body>
@@ -100,56 +97,56 @@ const sendEmail = async (to, name, uniqueKey) => {
 module.exports = sendEmail;
 
 //Function to send emails to recipients from a CSV file
-const sendEmailsFromCSV = async (csvFilePath) => {
-    const failedEmails = [];
+// const sendEmailsFromCSV = async (csvFilePath) => {
+//     const failedEmails = [];
 
-    try {
-        const data = await new Promise((resolve, reject) => {
-            const data = [];
+//     try {
+//         const data = await new Promise((resolve, reject) => {
+//             const data = [];
 
-            fs.createReadStream(csvFilePath)
-                .pipe(csv())
-                .on("data", (row) => {
-                    data.push(row);
-                })
-                .on("end", () => {
-                    resolve(data);
-                })
-                .on("error", (error) => {
-                    reject(error);
-                });
-        });
+//             fs.createReadStream(csvFilePath)
+//                 .pipe(csv())
+//                 .on("data", (row) => {
+//                     data.push(row);
+//                 })
+//                 .on("end", () => {
+//                     resolve(data);
+//                 })
+//                 .on("error", (error) => {
+//                     reject(error);
+//                 });
+//         });
 
-        for (const row of data) {
-            const { email, name, _id } = row;
+//         for (const row of data) {
+//             const { email, name, lab } = row;
 
-            const result = await sendEmail(email, name, _id);
+//             const result = await sendEmail(email, name, lab);
 
-            if (result) {
-                failedEmails.push(result);
-            }
-        }
+//             if (result) {
+//                 failedEmails.push(result);
+//             }
+//         }
 
-        console.log("All emails sent");
+//         console.log("All emails sent");
 
-        if (failedEmails.length > 0) {
-            // Write failed emails to a new CSV file
-            const failedCsvFilePath = "./Utils/data1.csv";
-            fs.writeFileSync(failedCsvFilePath, "to,name,uniqueKey\n");
+//         if (failedEmails.length > 0) {
+//             // Write failed emails to a new CSV file
+//             const failedCsvFilePath = "./Utils/data1.csv";
+//             fs.writeFileSync(failedCsvFilePath, "to,name,uniqueKey\n");
 
-            for (const emailData of failedEmails) {
-                fs.appendFileSync(
-                    failedCsvFilePath,
-                    `${emailData.email},${emailData.name},${emailData._id}\n`
-                );
-            }
+//             for (const emailData of failedEmails) {
+//                 fs.appendFileSync(
+//                     failedCsvFilePath,
+//                     `${emailData.email},${emailData.name},${emailData.lab}\n`
+//                 );
+//             }
 
-            console.log(`Failed emails written to ${failedCsvFilePath}`);
-        }
-    } catch (error) {
-        console.error("Error reading CSV:", error);
-    }
-};
-// Replace with the path to your CSV file
-const csvFilePath = "./Utils/data.csv";
-sendEmailsFromCSV(csvFilePath);
+//             console.log(`Failed emails written to ${failedCsvFilePath}`);
+//         }
+//     } catch (error) {
+//         console.error("Error reading CSV:", error);
+//     }
+// };
+// // Replace with the path to your CSV file
+// const csvFilePath = "./Utils/data.csv";
+// sendEmailsFromCSV(csvFilePath);
