@@ -10,17 +10,19 @@ const userSchema = new mongoose.Schema(
         name: { type: String, trim: true, required: true },
         mobileNo: { type: String, unique: true, required: true },
         studentNo: { type: String, unique: true, required: true },
-        branch: { type: String, enum: ['IT', 'CSE', 'CSE-AIML', 'AIML', 'CS', 'EN', 'ECE', 'ME', 'CSE-DS', 'CSIT', 'CE',"CSE-HINDI"] },
-        responses: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "questionResponse",
-            default: [],
-        }],
-        password: { type: String, required: true },
-        logintime: { type: Number, default: 0 },
-        isRelogin: { type: Boolean, default: false },
-        isSubmit: { type: Boolean, default: false },
-        category: { type: String },
+        branch: { type: String, enum: ['IT', 'CSE', 'CSE-AIML', 'AIML', 'CS', 'EN', 'ECE', 'ME', 'CSE-DS', 'CSIT', 'CE', "CSE-HINDI"] },
+        year: { type: String, required: true, enum: ['1', '2', '3', '4'] }
+        // responses: [{
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     ref: "questionResponse",
+        //     default: [],
+        // }],
+        // password: { type: String, required: true },
+        // logintime: { type: Number, default: 0 },
+        // isRelogin: { type: Boolean, default: false },
+        // isSubmit: { type: Boolean, default: false },
+        // category: { type: String },
+
     },
     { versionKey: false }
 );
