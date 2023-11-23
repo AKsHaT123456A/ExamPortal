@@ -28,10 +28,10 @@ const apiPrefix = '/api/v1';
 
 // Import routes
 const authRoute = require("./Routes/authRoute");
-const quesRoute = require("./Routes/quesRoute");
-const resRoute = require("./Routes/resRoute");
-const catRoute = require("./Routes/catRoute");
-// Database connection
+// const quesRoute = require("./Routes/quesRoute");
+// const resRoute = require("./Routes/resRoute");
+// const catRoute = require("./Routes/catRoute");
+// // Database connection
 connectDB();
 
 // Set trust proxy for reverse proxy support
