@@ -54,9 +54,9 @@ socketSetup(io);
 
 // Routes
 app.use(`${apiPrefix}/auth`, authRoute);
-app.use(`${apiPrefix}`, quesRoute);
-app.use(`${apiPrefix}`, resRoute);
-app.use(`${apiPrefix}/category`, catRoute);
+// app.use(`${apiPrefix}`, quesRoute);
+// app.use(`${apiPrefix}`, resRoute);
+// app.use(`${apiPrefix}/category`, catRoute);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
