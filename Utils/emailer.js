@@ -91,7 +91,7 @@ const emailer = async (to, name, uniqueKey) => {
                         <li>Time: 4:00 PM</li>
                     </ul>
                     <p>To confirm your registration and ensure your participation in the event, please click the following link:</p>
-                    <p><a href=https://csi-examportal.onrender.com/api/v1/auth/verify/${uniqueKey} class="button">Confirm Registration</a></p>
+                    <p><a href=https://portaltest.onrender.com/api/v1/auth/verify/${uniqueKey} class="button">Confirm Registration</a></p>
                     <p>Kindly note that your registration will not be considered valid until this confirmation step is completed.</p>
                     <p>Please make sure to mark your calendar and set a reminder for this event. It will be a great opportunity for 2nd-year students like you to explore exciting career prospects in the industry.</p>
                     <p>Location and further instructions for the event will be communicated to you closer to the date. In the meantime, if you have any questions or need any additional information, please feel free to contact us at <a href="mailto:csichapters@gmail.com">csichapters@gmail.com</a> or can contact us at Instagram handle <a href="https://www.instagram.com/csi_akgec/">csi_akgec</a>.</p>
