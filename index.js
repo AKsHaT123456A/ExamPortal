@@ -18,7 +18,7 @@ const server = http.createServer(app);
 // Create a Socket.IO instance attached to the server
 const io = socketIO(server, {
   cors: {
-    origin: 'https://csiexam-portal.vercel.app/',
+    origin: 'https://csi-exam-portal.vercel.app/',
     methods: ['GET', 'POST'],
   },
 });
