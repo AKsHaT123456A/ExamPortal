@@ -1,9 +1,9 @@
 
-const submitController = (_, res) => {
+const submitController = async (_, res) => {
     const visited = require('../Models/visited');
     try {
-        var userId = process.env.USER_ID;        
-        visited.deleteMany({ userId });
+        var userId = process.env.USER_ID;
+        await visited.deleteMany({ userId });
         return res.status(200).json({ message: 'Visited data deleted' });
     } catch (error) {
         console.error(error);
@@ -11,4 +11,4 @@ const submitController = (_, res) => {
     }
 }
 
-module.exports=submitController;
+module.exports = submitController;

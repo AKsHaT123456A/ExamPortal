@@ -104,7 +104,7 @@ module.exports.isVisited = async (req, res) => {
             const alreadyVisited = await visited.find({ userId: id, isVisited: true });
             return res.status(200).json(alreadyVisited);
         }
-
+        
         await visited.create({ userId: id, category, quesId});
         const updatedVisited = await visited.find({ userId: id });
 
