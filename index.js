@@ -63,7 +63,7 @@ app.use(`${apiPrefix}/auth`, authRoute);
 app.use(`${apiPrefix}`, quesRoute);
 app.use(`${apiPrefix}`, resRoute);
 app.use(`${apiPrefix}/category`, catRoute);
-app.get("/metrics", async (_req, res) => {
+app.get("/api/v1/status/buildinfo", async (_req, res) => {
   const metrics = await client.register.metrics();
   res.set('Content-Type', client.register.contentType);
   res.end(metrics);
