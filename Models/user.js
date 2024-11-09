@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
-const userValidationSchema = require("../validators/userValidationSchema");
+import { Schema, model } from "mongoose";
+import userValidationSchema from "../validators/userValidationSchema.js";
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
     {
         email: { type: String, unique: true, required: true },
         gender: { type: String, enum: ['Female', 'Male'] },
@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema(
         studentNo: { type: String, unique: true, required: true },
         branch: { type: String, enum: ['IT', 'CSE', 'CSE-AIML', 'AIML', 'CS', 'EN', 'ECE', 'ME', 'CSE-DS', 'CSIT', 'CE',"CSE-HINDI"] },
         responses: [{
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: "questionResponse",
             default: [],
         }],
@@ -38,5 +38,5 @@ const validateUser = (user) => {
     }
 };
 
-const User = mongoose.model("User", userSchema);
-module.exports = { User, validateUser };
+const User = model("User ", userSchema);
+export { User , validateUser };

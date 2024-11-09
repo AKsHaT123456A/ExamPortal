@@ -1,6 +1,6 @@
-const Question = require("../Models/question");
+import Question from "../Models/question.js";
 
-const addquestions = async ({ body }, res) => {
+export const addquestions = async ({ body }, res) => {
     try {
         const responseData = body;
         const quesId = responseData.quesId;
@@ -23,7 +23,7 @@ const addquestions = async ({ body }, res) => {
     }
 };
 
-const getquestions = async (req, res) => {
+export const getquestions = async (_req, res) => {
     try {
         const data = await Question.find({}, { _id: 0, __v: 0 });
 
@@ -38,7 +38,7 @@ const getquestions = async (req, res) => {
     }
 };
 
-const deletequestion = async (req, res) => {
+export const deletequestion = async (req, res) => {
     try {
         const data = await Question.findByIdAndDelete(req.params.id);
         if (!data) return res.status(404).json({ success: false, msg: "Question not found" });
@@ -48,7 +48,7 @@ const deletequestion = async (req, res) => {
     }
 };
 
-const updatequestion = async (req, res) => {
+export const updatequestion = async (req, res) => {
     try {
         const updatedData = await Question.findByIdAndUpdate(req.params.id, { $set: req.body });
 
@@ -63,7 +63,7 @@ const updatequestion = async (req, res) => {
         throw error;
     }
 };
-const categoryquestion = async (req, res) => {
+export const categoryquestion = async (req, res) => {
     try {
         const data = await Question.find({ category: req.params.key }, { __v: 0 });
         if (!data || data.length === 0) {
@@ -90,7 +90,7 @@ const categoryquestion = async (req, res) => {
 };
 
 
-const countQuestion = async (req, res) => {
+export const countQuestion = async (req, res) => {
     try {
         const category = req.query.category;
         const count = await Question.find({category});
@@ -100,11 +100,3 @@ const countQuestion = async (req, res) => {
     }
 };
 
-module.exports = {
-    addquestions,
-    getquestions,
-    deletequestion,
-    updatequestion,
-    categoryquestion,
-    countQuestion,
-};

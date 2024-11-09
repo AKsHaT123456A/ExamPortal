@@ -1,13 +1,12 @@
-const csrf = require("csurf");
-const register = require("../Controllers/authController");
-const limiter = require("../middleware/limiter");
-const browserOnlyMiddleware = require("../middleware/browserCheckMiddleware");
-const CryptoJS = require('crypto-js');
-const verify = require("../Controllers/verifycontroller");
-const registerDecrypt = require("../Controllers/authController");
+import csrf from "csurf";
+import register from "../Controllers/authController.js";
+import limiter from "../middleware/limiter.js";
+import verify from "../Controllers/verifycontroller.js";
+import registerDecrypt from "../Controllers/authController.js";
 
 const csrfProtection = csrf({ cookie: true });
-const router = require("express").Router();
+import express from "express";
+const router = express.Router();
 router.get("/preregistration", csrfProtection, (req, res) => {
     const csrfToken = req.csrfToken();
     res.json({ csrfToken });
@@ -15,4 +14,4 @@ router.get("/preregistration", csrfProtection, (req, res) => {
 router.post("/register", limiter, register);
 router.post("/Decregister", limiter, registerDecrypt);
 router.get("/verify/:id", verify);
-module.exports = router;
+export default router;

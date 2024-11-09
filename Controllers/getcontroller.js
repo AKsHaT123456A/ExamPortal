@@ -1,11 +1,11 @@
-const questionResponse = require("../Models/questionResponse");
-const { User } = require("../Models/user");
+import questionResponse from "../Models/questionResponse.js";
+import {User}  from "../Models/user.js";
 
 const userResponseSend = async (req, res) => {
     const { id } = req.params;
     console.log(id);
     try {
-        const user = await User.findOne({ studentNo: id });
+        const user = await User .findOne({ studentNo: id });
 console.log(user);
         const questionPromises = user.responses.map(async (response) => {
             const question = await questionResponse.findById(response);
@@ -20,4 +20,4 @@ console.log(user);
     }
 };
 
-module.exports = userResponseSend;
+export default userResponseSend;

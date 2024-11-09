@@ -1,19 +1,19 @@
-const { User } = require("../Models/user");
+import {User} from "../Models/user.js";
 
-module.exports.updateCategory = async (req, res) => {
+export async function updateCategory(req, res) {
     try {
         const { category } = req.query;
         const { id } = req.params;
         if (!category) {
-            const category = await User.findById(id).select('category');
+            const category = await User .findById(id).select('category');
             return res.status(200).json({ category: category.category });
         }
-        const updatedUser = await User.findOneAndUpdate(
+        const updatedUser = await User .findOneAndUpdate(
             { _id: id },
             { $set: { category } },
         );
 
-        if (!updatedUser) {
+        if (!updatedUser ) {
             return res.status(404).json({ message: "User not found" });
         }
 

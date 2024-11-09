@@ -1,7 +1,6 @@
-const fetch = require("isomorphic-fetch");
+import fetch from "isomorphic-fetch";
 
 const SECRET = process.env.SECRETS;
-const axios = require('axios')
 
 const getReCaptcha = async (reCaptcha) => {
 
@@ -34,4 +33,4 @@ const getReCaptcha = async (reCaptcha) => {
     }
 };
 
-module.exports = getReCaptcha;
+export default getReCaptcha;

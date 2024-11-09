@@ -1,7 +1,7 @@
-const { User } = require('../Models/user');
-const Question = require('../Models/question');
-const questionResponse = require('../Models/questionResponse');
-const visited = require('../Models/visited');
+import  {User} from '../Models/user.js';
+import Question from '../Models/question.js';
+import questionResponse from '../Models/questionResponse.js';
+import visited from '../Models/visited.js';
 const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
     console.log(id, status, quesId, ansId);
     try {
@@ -33,14 +33,14 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
                 userId
             });
 
-            const user = await User.findById(id);
+            const user = await User .findById(id);
             user.responses.addToSet(existingResponse.id); // Add response to user's responses array
             // console.log(user.responses)
 
             user.calculatedTotalScore += score; // Update total score
             await user.save();
         } else {
-            const user = await User.findById(id);
+            const user = await User .findById(id);
 
             // Calculate score change and update total score
             const oldScore = existingResponse.score;
@@ -49,11 +49,11 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
             existingResponse.ansStatus = ansStatus;
             existingResponse.ansId = ansId;
             user.calculatedTotalScore += scoreChange;
-            const [a, b] = await Promise.all([existingResponse.save(), user.save()]);
+            const [] = await Promise.all([existingResponse.save(), user.save()]);
             //    console.log(a);
         }
 
-        const userWithResponses = await User.findById(id).populate({
+        const userWithResponses = await User .findById(id).populate({
             path: 'responses',
             select: 'ansStatus score quesId ansId category -_id'
         });
@@ -68,7 +68,7 @@ const fetchResponseFromDatabase = async (id, status, quesId, ansId) => {
     }
 };
 
-module.exports.response = async (req, res) => {
+export async function response(req, res) {
     try {
         const { id } = req.params;
         const { ansId, status, quesId } = req.query;
@@ -78,12 +78,12 @@ module.exports.response = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ error: "Internal Server Error", message: error.message });
     }
-};
+}
 
-module.exports.userResponse = async (req, res) => {
+export async function userResponse(req, res) {
     const { id } = req.query;
     try {
-        const user = await User.findById(id).populate({
+        const user = await User .findById(id).populate({
             path: 'responses',
             select: 'ansStatus score quesId ansId -_id'
         });
@@ -91,9 +91,9 @@ module.exports.userResponse = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ error: "Internal Server Error", message: error.message });
     }
-};
+}
 
-module.exports.isVisited = async (req, res) => {
+export async function isVisited(req, res) {
     const { id } = req.params;
     const { category, quesId } = req.query;
 
@@ -114,7 +114,7 @@ module.exports.isVisited = async (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
-};
+}
 
 
 

@@ -1,6 +1,6 @@
-const { User } = require("../Models/user");
+import { User } from "../Models/user.js";
 
-module.exports.socketSetup = (io) => {
+export function socketSetup(io) {
     let leaderboardData = [];
 
     const updateLeaderboardAndEmit = async () => {
@@ -12,7 +12,7 @@ module.exports.socketSetup = (io) => {
                     studentNo: user.studentNo,
                     name: user.name,
                     calculatedTotalScore: calculatedTotalScore,
-                    userId:user.userId
+                    userId: user.userId
 
                 };
             });
@@ -39,4 +39,4 @@ module.exports.socketSetup = (io) => {
     }, 10000);
 
     updateLeaderboardAndEmit();
-};
+}
