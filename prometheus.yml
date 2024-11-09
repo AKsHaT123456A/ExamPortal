@@ -9,3 +9,4 @@ scrape_configs:
     scheme: https
     static_configs:
       - targets: ['examportal-4.onrender.com']
+  metrics_path: '/metrics'
