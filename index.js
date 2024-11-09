@@ -76,7 +76,7 @@ app.use((err, _req, res, _next) => {
 });
 
 // Start the server
-server.listen(constants.PORT, () => {
+server.listen(constants.PORT,"0.0.0.0", () => {
   console.log(` Server running at port ${constants.PORT}`);
 });
 
