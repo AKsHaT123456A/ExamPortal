@@ -10,6 +10,7 @@ ADD prometheus.yml /etc/prometheus/
 # Sets the Render service name in prometheus.yml
 # using the RENDER_SERVICE_NAME environment variable
 ARG RENDER_SERVICE_NAME
+RUN mkdir -p /var/data/prometheus && chown -R nobody:nogroup /var/data/prometheus
 RUN sed -i "s/RENDER_SERVICE_NAME/${RENDER_SERVICE_NAME}/g" /etc/prometheus/prometheus.yml
 
 # Sets the storage path to your persistent disk path,
