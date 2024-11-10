@@ -8,4 +8,4 @@ const constants = {
     CACHE_TTL: 7200000// 2 hours
 };
 
-module.exports = constants;
+export default constants;

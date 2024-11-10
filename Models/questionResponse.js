@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const responseSchema = new mongoose.Schema({
+import { Schema, model } from "mongoose";
+const responseSchema = new Schema({
     ansStatus: { type: Number, default: 0 },
     score: { type: Number, default: 0 },
     ansId: { type: String, index: true },
@@ -9,5 +9,5 @@ const responseSchema = new mongoose.Schema({
 }, { versionKey: false });
 
 
-const questionResponse = mongoose.model("questionResponse", responseSchema);
-module.exports = questionResponse;
+const questionResponse = model("questionResponse", responseSchema);
+export default questionResponse;

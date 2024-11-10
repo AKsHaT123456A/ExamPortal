@@ -1,9 +1,8 @@
 
-const mongoose = require("mongoose");
-const constants = require("./constants");
+import { connect } from "mongoose";
+import constants from "./constants.js";
 const connectDB = async () => {
-    mongoose
-        .connect(
+    connect(
             process.env.DATABASE_KEY || constants.DATABASE_KEY,
             { useNewUrlParser: true }
         )
@@ -14,4 +13,4 @@ const connectDB = async () => {
             console.log(err);
         })
 }
-module.exports = connectDB;
+export default connectDB;

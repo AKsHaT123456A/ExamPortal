@@ -1,5 +1,4 @@
-const Joi = require('@hapi/joi');
-
+import Joi from '@hapi/joi';
 const userValidationSchema = Joi.object({
   email: Joi.string().email().required(),
   mobileNo: Joi.string().regex(/^[6-9]([0-9]){9}$/).required(),
@@ -18,4 +17,4 @@ const userValidationSchema = Joi.object({
   score: Joi.number(),
 }).prefs({ convert: false });
 
-module.exports = userValidationSchema;
+export default userValidationSchema;

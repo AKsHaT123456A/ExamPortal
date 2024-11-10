@@ -1,4 +1,4 @@
-const isBrowser = require("../Utils/browserCheck");
+import isBrowser from "../Utils/browserCheck.js";
 
 function browserOnlyMiddleware(req, res, next) {
   if (isBrowser(req)) {
@@ -8,4 +8,4 @@ function browserOnlyMiddleware(req, res, next) {
   }
 }
 
-module.exports = browserOnlyMiddleware;
+export default browserOnlyMiddleware;

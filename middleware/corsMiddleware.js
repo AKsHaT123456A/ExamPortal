@@ -1,4 +1,4 @@
-const cors = require("cors");
+import cors from "cors";
 
 const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://127.0.0.1:5175', 'http://localhost:3000', 'http://127.0.0.1:5500', 'https://csiportal.vercel.app/', 'https://csi-portal.netlify.app/'];
 
@@ -15,4 +15,4 @@ const corsMiddleware = cors({
     optionsSuccessStatus: 200,
 });
 
-module.exports = corsMiddleware;
+export default corsMiddleware;

@@ -1,8 +1,8 @@
-const { updateCategory, category } = require("../Controllers/catController");
+import { updateCategory } from "../Controllers/catController.js";
 
-const router = require("express").Router();
-
+import express from "express";
+const router = express.Router();
 router.get("/user/:id/", updateCategory);
 
 
-module.exports = router;
+export default router;

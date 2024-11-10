@@ -1,6 +1,6 @@
 
 const submitController = async (_, res) => {
-    const visited = require('../Models/visited');
+    const visited = require('../Models/visited').default;
     try {
         var userId = process.env.USER_ID;
         await visited.deleteMany({ userId });
@@ -11,4 +11,4 @@ const submitController = async (_, res) => {
     }
 }
 
-module.exports = submitController;
+export default submitController;

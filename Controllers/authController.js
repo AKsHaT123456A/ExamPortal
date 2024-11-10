@@ -1,12 +1,13 @@
-// const { User, validateUser } = require("../Models/user");
+// const { User , validateUser } = require("../Models/user");
 // const constants = require("../Connections/constants");
 // const CryptoJS = require("crypto-js");
 // const axios = require("axios");
-const emailer = require("../Utils/emailer");
+import emailer from "../Utils/emailer.js";
 
-const CryptoJS = require('crypto-js'); // Add this import
-const axios = require('axios');
-const { User } = require('../Models/user');
+import pkg from 'crypto-js';
+const { AES, enc } = pkg;
+import axios from 'axios';
+import { User } from '../Models/user.js';
 
 const registerDecrypt = async (req, res) => {
   try {
@@ -80,8 +81,8 @@ const registerDecrypt = async (req, res) => {
 // Function to decrypt the data using CryptoJS
 const decryptData = (encryptedData, secretKey) => {
   try {
-    const bytes = CryptoJS.AES.decrypt(encryptedData, secretKey);
-    const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+    const bytes = AES.decrypt(encryptedData, secretKey);
+    const decryptedData = bytes.toString(enc.Utf8);
     return decryptedData;
   } catch (error) {
     console.error('Decryption error:', error);
@@ -89,4 +90,4 @@ const decryptData = (encryptedData, secretKey) => {
   }
 };
 
-module.exports = registerDecrypt;
+export default registerDecrypt;

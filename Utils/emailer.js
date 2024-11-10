@@ -1,8 +1,8 @@
-const nodemailer = require("nodemailer");
+import { createTransport } from "nodemailer";
 const emailer = async (to, name, uniqueKey) => {
     // let testAccount=await nodemailer.createTestAccount();
     //connect with the smpt server
-    let transporter = nodemailer.createTransport({
+    let transporter = createTransport({
         service: "gmail",
         host: "smtp.gmail.email",
         port: 465,
@@ -109,4 +109,4 @@ const emailer = async (to, name, uniqueKey) => {
     console.log("Message sent: %s", info.messageId);
 
 }
-module.exports = emailer;
+export default emailer;
