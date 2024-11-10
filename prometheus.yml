@@ -1,11 +1,25 @@
 global:
-  scrape_interval: 15s # How frequently to scrape targets
+  scrape_interval: 15s  # How frequently to scrape targets
 
 scrape_configs:
-  - job_name: 'nodejs-app'
+  # Scrape Prometheus itself
+  - job_name: 'prometheus'
     static_configs:
-      - targets: ['examportal:3000']
-  - job_name: 'prod-app'
-    scheme: https
+      - targets: ['localhost:9090']
+
+  # Scrape the ExamPortal application running on Render
+  - job_name: 'examportal-app'
+    basic_auth:
+      username: '${PROMETHEUS_USERNAME}'  # Use environment variable for username
+      password: '${PROMETHEUS_PASSWORD}'  # Use environment variable for password
     static_configs:
-      - targets: ['examportal-4.onrender.com']
+      - targets: ['examportal-2.onrender.com']
+
+  # (Optional) If deploying Prometheus as a separate Render service and need service discovery
+  # Uncomment and adjust this section if you need dynamic discovery of other Render services
+  # - job_name: 'render-service-discovery'
+  #   dns_sd_configs:
+  #     - names: ['examportal-4-discovery']
+  #       type: A
+  #       port: 3000
+  #       refresh_interval: 5s  # Refresh every 5 seconds

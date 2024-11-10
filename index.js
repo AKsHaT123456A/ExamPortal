@@ -65,6 +65,11 @@ app.use(`${apiPrefix}`, quesRoute);
 app.use(`${apiPrefix}`, resRoute);
 app.use(`${apiPrefix}/category`, catRoute);
 app.get("/metrics", async (_req, res) => {
+  if (!user || user.name !== constants.PROMETHEUSER || user.pass !== constants.PROMETHEPASS) {
+    res.statusCode = 401;
+    res.setHeader('WWW-Authenticate', 'Basic realm="Metrics"');
+    return res.end('Access denied');
+  }
   const metrics = await client.register.metrics();
   res.set('Content-Type', client.register.contentType);
   res.end(metrics);
