@@ -6,6 +6,7 @@ import { Server as socketIO } from 'socket.io';
 import constants from "./Connections/constants.js";
 import client from "prom-client";
 
+
 import connectDB from "./Connections/db.js";
 import { socketSetup } from "./Utils/leaderSocket.js";
 import dotenv from "dotenv";
@@ -75,8 +76,10 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: "Internal Server Error", err: err.message });
 });
 
+
+
+
 // Start the server
-server.listen(constants.PORT,"0.0.0.0", () => {
+server.listen(constants.PORT, "0.0.0.0", () => {
   console.log(` Server running at port ${constants.PORT}`);
 });
-

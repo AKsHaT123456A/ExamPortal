@@ -14,7 +14,7 @@ export const addquestions = async ({ body }, res) => {
         const totalCount = await Question.countDocuments();
 
         const result = await Question.create({ ...responseData, count: totalCount + 1 });
-
+        
         const { correctId, ...info } = result._doc;
 
         return res.status(201).json({ success: true, msg: info });
