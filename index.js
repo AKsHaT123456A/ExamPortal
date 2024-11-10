@@ -6,7 +6,8 @@ import { Server as socketIO } from 'socket.io';
 import constants from "./Connections/constants.js";
 import client from "prom-client";
 
-
+import pkg from 'basic-auth';
+const { basicAuth } = pkg;
 import connectDB from "./Connections/db.js";
 import { socketSetup } from "./Utils/leaderSocket.js";
 import dotenv from "dotenv";
@@ -64,7 +65,8 @@ app.use(`${apiPrefix}/auth`, authRoute);
 app.use(`${apiPrefix}`, quesRoute);
 app.use(`${apiPrefix}`, resRoute);
 app.use(`${apiPrefix}/category`, catRoute);
-app.get("/metrics", async (_req, res) => {
+app.get("/metrics", async (req, res) => {
+  const user = basicAuth(req);
   if (!user || user.name !== constants.PROMETHEUSER || user.pass !== constants.PROMETHEPASS) {
     res.statusCode = 401;
     res.setHeader('WWW-Authenticate', 'Basic realm="Metrics"');
