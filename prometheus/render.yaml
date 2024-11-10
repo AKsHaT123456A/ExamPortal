@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: prometheus
-    env: docker
-    plan: standard
-    disk:
-      name: data
-      mountPath: .
-      sizeGB: 10
