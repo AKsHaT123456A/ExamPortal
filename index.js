@@ -6,8 +6,7 @@ import { Server as socketIO } from 'socket.io';
 import constants from "./Connections/constants.js";
 import client from "prom-client";
 
-import pkg from 'basic-auth';
-const { basicAuth } = pkg;
+import basicAuth from 'basic-auth';
 import connectDB from "./Connections/db.js";
 import { socketSetup } from "./Utils/leaderSocket.js";
 import dotenv from "dotenv";
