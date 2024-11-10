@@ -5,5 +5,5 @@ services:
     plan: standard
     disk:
       name: data
-      mountPath: /prometheus
+      mountPath: .
       sizeGB: 10
