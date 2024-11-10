@@ -1,0 +1,6 @@
+groups:
+  - name: events
+    interval: 15s
+    rules:
+      - record: <rule-record>
+        expr: <rule-expr>

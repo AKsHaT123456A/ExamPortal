@@ -9,7 +9,6 @@ scrape_configs:
 
   # Scrape the ExamPortal application running on Render
   - job_name: 'examportal-app'
-    scheme: https
     static_configs:
       - targets: ['examportal-4.onrender.com']
 
