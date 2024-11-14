@@ -1,6 +1,3 @@
-Here is the proper markdown conversion for your README:
-
-```markdown
 # ExamPoral
 
 ![Project Image](https://socialify.git.ci/AKsHaT123456A/ExamPortal/image?name=1&owner=1&pattern=Solid&theme=Dark)
@@ -57,6 +54,3 @@ Technologies used in the project:
 - Redis
 - Prometheus
 - Grafana
-```
-
-This markdown formatting will work well for a GitHub README.
