@@ -8,7 +8,6 @@ const userResponseSend = async (
   res
 ) => {
   const { id } = req.params;
-  console.log(id);
   try {
     const user = await User_Test.findOne({ studentNo: id });
     if (!user) {

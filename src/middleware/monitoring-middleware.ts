@@ -4,8 +4,6 @@ import { MetricsClass } from "../services/monitoring-service";
 export const metrics = (req: Request, res: Response, next: NextFunction) => {
   const metrics = MetricsClass.getInstance(); // Get the singleton instance of metrics
   const timer = metrics.httpRequestDurationSeconds.startTimer();
-console.log("metrics", metrics);
-
   res.on("finish", () => {
     // Increment the request counter
     metrics.totalHttpRequests.inc({
