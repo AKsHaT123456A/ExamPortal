@@ -11,8 +11,14 @@ const deleteZeroScoreUsers = async () => {
     await db.connect();
 
     // Find users with a score of 0
-    const usersToDelete = await User_Test.find({ score: 0 });
-    const userIds = usersToDelete.map((user) => user._id);
+    const usersToDelete = await User_Test.find({ 
+        score: 0, 
+        $or: [
+            { responses: { $exists: false } },
+            { responses: { $size: 0 } }       
+        ]
+    });
+        const userIds = usersToDelete.map((user) => user._id);
 
     if (userIds.length === 0) {
       console.log("No users found with score 0.");
