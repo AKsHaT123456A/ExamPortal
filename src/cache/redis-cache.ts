@@ -39,7 +39,17 @@ export class RedisCache implements ICache {
     }
     return this.instance;
   }
+   getSubscriber(): void {
+    this.redisSubscriber.subscribe("leaderboard", (err, _count) => {
+      console.log("Subscribed to leaderboard channel");
 
+      if (err) {
+        console.error("Failed to subscribe to leaderboard channel", err);
+      }
+      return;
+    });
+    
+}
   public async get(
     userId: string,
   ): Promise<QuestionData | null> {
