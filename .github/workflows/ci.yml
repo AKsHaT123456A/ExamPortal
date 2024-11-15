@@ -31,6 +31,6 @@ jobs:
       # Step 5: Run the deletion script
       - name: Delete users with zero score
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.MONGODB_URI }}
           REDIS_URL: ${{ secrets.REDIS_URL }}
         run: node dist/scripts/user-delete.js
