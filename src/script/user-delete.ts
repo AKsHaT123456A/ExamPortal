@@ -10,7 +10,7 @@ const deleteZeroScoreUsers = async () => {
     const db = MongoDB.getInstance();
     await db.connect();
 
-    // Find users with a score of 0
+    // // Find users with a score of 0
     const usersToDelete = await User_Test.find({ 
         score: 0, 
         $or: [
@@ -25,7 +25,7 @@ const deleteZeroScoreUsers = async () => {
       return;
     }
 
-    // Delete the users
+    // // Delete the users
     await User_Test.deleteMany({ score: 0 });
     console.log(`Deleted ${userIds.length} users with score 0.`);
 
