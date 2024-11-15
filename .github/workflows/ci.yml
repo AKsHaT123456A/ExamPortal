@@ -1,22 +1,36 @@
-# This is a basic workflow to help you get started with Actions
+name: Delete Users with Zero Score
 
-name: First Cron Job
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow every minute
   schedule:
-    - cron: "* * * * *"
+    - cron: "* * * * * *" # Runs every second
+  workflow_dispatch: # Allow manual triggering of the workflow
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "cron"
-  cron:
-    # The type of runner that the job will run on
+  delete-users:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Runs a single command using the runner's shell
-      - name: Run a one-line script
-        run: echo "Hello, world!"
+      # Step 1: Check out the repository
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20" # Use the required Node.js version
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Build the TypeScript files
+      - name: Build TypeScript
+        run: npm run build
+
+      # Step 5: Run the deletion script
+      - name: Delete users with zero score
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+        run: node dist/scripts/user-delete.js
