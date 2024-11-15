@@ -10,25 +10,13 @@ const deleteZeroScoreUsers = async () => {
     const db = MongoDB.getInstance();
     await db.connect();
 
-    // // Find users with a score of 0
-    const usersToDelete = await User_Test.find({ 
-        score: 0, 
-        $or: [
-            { responses: { $exists: false } },
-            { responses: { $size: 0 } }       
-        ]
-    });
-        const userIds = usersToDelete.map((user) => user._id);
-
-    if (userIds.length === 0) {
-      console.log("No users found with score 0.");
-      return;
-    }
-
     // // Delete the users
-    await User_Test.deleteMany({ score: 0 });
-    console.log(`Deleted ${userIds.length} users with score 0.`);
-
+    await User_Test.deleteMany({ $or: [
+      { responses: { $exists: false } },
+      { responses: { $size: 0 } }       
+  ]});
+  
+      console.log("Deletion process completed successfully");
   } catch (error) {
     console.error("Error during deletion process:", error);
   } finally {
