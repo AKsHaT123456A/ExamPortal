@@ -5,14 +5,14 @@ module.exports.socketSetup = (io) => {
 
     const updateLeaderboardAndEmit = async () => {
         try {
-            const users = await User.find().populate('responses').select(' studentNo name userId');
+            const users = await User.find().populate('responses').select(' studentNo name _id');
             leaderboardData = users.map(user => {
                 const calculatedTotalScore = user.responses.reduce((total, response) => total + response.score, 0);
                 return {
                     studentNo: user.studentNo,
                     name: user.name,
                     calculatedTotalScore: calculatedTotalScore,
-                    userId:user.userId
+                    userId:user.user._id
 
                 };
             });
