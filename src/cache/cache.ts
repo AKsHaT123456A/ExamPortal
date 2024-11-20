@@ -1,4 +1,4 @@
-import { ICache } from "../services/i-cache-service";
+import { ICache } from "../interfaces/i-cache-interface";
 import { QuestionData } from "../types/question-type-service";
 import { InMemoryCache } from "./inmemory-cache";
 import { RedisCache } from "./redis-cache";

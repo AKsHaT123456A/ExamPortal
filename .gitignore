@@ -6,3 +6,7 @@ node_modules/
 
 # Ignore dist directory
 dist/
+
+clusters.yml
+deployments.yml
+services.yml

@@ -12,6 +12,7 @@ app.use(metrics)
 
 import basicAuth from 'basic-auth';
 import WebSocketServerSingleton from "./ws/socket-ws";
+import { startEmailConsumer } from "./utils/email-utils";
 const websocketServer = WebSocketServerSingleton.getInstance();
 async function startApp() {
   app.use(express.json());
@@ -30,7 +31,7 @@ async function startApp() {
       websocketServer.handleUpgrade(request, socket, head); 
     });
   server.listen(constants.PORT, () => {
-    console.log(`Server is running on http://localhost:${constants.PORT}`);
+    console.log(`Server is running on port ${constants.PORT}`);
   });
 }
 app.get("/metrics", (req, res) => {
@@ -50,6 +51,13 @@ app.get("/metrics", (req, res) => {
   });
 });
 app.use(cors());
+startEmailConsumer()
+  .then(() => {
+    console.log("Email consumer started.");
+  })
+  .catch((error) => {
+    console.error("Failed to start email consumer:", error);
+  });
 // Graceful shutdown
 process.on("SIGINT", async () => {
   console.log("Shutting down gracefully...");

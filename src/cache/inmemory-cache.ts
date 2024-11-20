@@ -1,5 +1,5 @@
 import { QuestionData } from "../types/question-type-service";
-import { ICache } from "../services/i-cache-service";
+import { ICache } from "../interfaces/i-cache-interface";
 
 interface ICacheEntry {
   response: any[];

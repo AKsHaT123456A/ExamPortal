@@ -1,5 +1,5 @@
 import { Redis } from "ioredis";
-import { ICache } from "../services/i-cache-service";
+import { ICache } from "../interfaces/i-cache-interface";
 import { QuestionData } from "../types/question-type-service";
 import WebSocketServerSingleton from "../ws/socket-ws";
 
@@ -72,7 +72,7 @@ export class RedisCache implements ICache {
     userId: string
   ): Promise<void> {
     try {
-      const expirationTimeInSeconds = 3600*5;
+      const expirationTimeInSeconds = 18000;
       
       await this.client.set(
         userId,

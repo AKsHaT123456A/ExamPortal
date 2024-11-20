@@ -15,6 +15,7 @@ const userSchema = new Schema<IUser>(
         isRelogin: { type: Boolean, default: false },
         isSubmit: { type: Boolean, default: false },
         category: { type: String },
+        codingPoints: { type: Number ,default: -1 },
     },
     { versionKey: false,timestamps:true }
 );

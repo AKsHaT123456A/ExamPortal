@@ -8,6 +8,7 @@ export const createTestUser = async (_req, res) => {
     const password = `${name.split(' ')[0]}@${studentNo}`;
 
     try {
+        
         // Find the most recently created user by sorting by createdAt
         const latestUser = await User_Test.findOne().sort({ createdAt: -1 });
 
@@ -44,7 +45,6 @@ export const createTestUser = async (_req, res) => {
         });
 
         await testUser.save();
-
         return res.status(201).json({
             studentNo,
             password,

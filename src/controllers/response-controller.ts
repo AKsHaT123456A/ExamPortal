@@ -26,7 +26,7 @@ class ResponseController {
         quesId,
         ansId
       );
-      
+
       res.status(200).json({
         message: result.message,
         userResponses: result.user,
@@ -35,12 +35,9 @@ class ResponseController {
     } catch (error) {
       //@ts-ignore
       let err: Error = error;
-      res
-        .status(500)
-        .json({
-          message:
-            err.message || "An error occurred while handling the response",
-        });
+      res.status(500).json({
+        message: err.message || "An error occurred while handling the response",
+      });
     }
   }
 
@@ -54,17 +51,36 @@ class ResponseController {
       res.status(200).json(result);
     } catch (error) {
       //@ts-ignore
-      res
-        .status(500)
-        .json({
-          message:
-                //@ts-ignore
+      res.status(500).json({
+        message:
+          //@ts-ignore
 
-            error.message || "An error occurred while fetching user responses",
-        });
+          error.message || "An error occurred while fetching user responses",
+      });
     }
   }
-  
+  public async submittedReportController(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    try {
+      const { studentNo } = req.params;
+      const { email } = req.body;
+      const result = await this.responseService.submittedReport(
+        studentNo,
+        email
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      //@ts-ignore
+      res.status(500).json({
+        message:
+          //@ts-ignore
+
+          error.message || "An error occurred while fetching user responses",
+      });
+    }
+  }
 }
 
 export default ResponseController;

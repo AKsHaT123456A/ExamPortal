@@ -1,9 +1,12 @@
 // QuestionService.ts
 import { CustomError } from "../error/custom-error";
+import CodingQuestion from "../models/coding-question-model";
 import Question  from "../models/question-model"; // Import your Question Mongoose model
 import {
+  AddCodingQuestionResponse,
   AddQuestionRequest,
   AddQuestionResponse,
+  CategoryCodingQuestionsResponse,
   CategoryQuestionsResponse,
 } from "../types/question-type-service";
 
@@ -21,9 +24,9 @@ class QuestionService {
   }
 
   // Method to add a question
-  public async addQuestion(data: AddQuestionRequest): Promise<AddQuestionResponse> {
+  public async addQuestion(data: AddQuestionRequest): Promise<AddQuestionResponse|AddCodingQuestionResponse> {
     try {
-      const newQuestion = new Question(data);
+      const newQuestion = data.category==="Coding"?new CodingQuestion(data):new Question(data);
       const savedQuestion = await newQuestion.save();
       return savedQuestion.toObject();
     } catch (error) {
@@ -39,7 +42,7 @@ class QuestionService {
         const questionObj = question.toObject();
         return {
           ...questionObj,
-          ansId: questionObj.correctId // Assuming ansId should be the same as correctId
+          ansId: questionObj.correctId 
         };
       });
     } catch (error) {
@@ -77,17 +80,17 @@ class QuestionService {
   // Method to get questions by category
   public async getCategoryQuestions(
     category: string
-  ): Promise<CategoryQuestionsResponse[]> {
+  ): Promise<CategoryQuestionsResponse[] | CategoryCodingQuestionsResponse[]> {
     try {
-      const questions = await Question.find({ category });
-      return questions.map((question) => {
+      const questions = category === "Coding" ? await CodingQuestion.find() : await Question.find({ category });
+      return questions.map((question: any) => {
         const questionObj = question.toObject();
         return {
           ...questionObj,
           ansId: questionObj.correctId // Assuming ansId should be the same as correctId
         };
       });
-    } catch (error) {
+    } catch (error: any) {
       throw new CustomError("Failed to fetch questions by category", 500);
     }
   }

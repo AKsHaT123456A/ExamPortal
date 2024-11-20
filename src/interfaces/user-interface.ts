@@ -6,9 +6,12 @@ export interface IUser extends Document {
     name: string;
     mobileNo: string;
     studentNo: string;
-    responses: { score: number }[]; 
+    responses: {
+      ansStatus: number; score: number 
+}[]; 
     password: string;
     logintime: number;
+    codingPoints: number;
     isRelogin: boolean;
     isSubmit: boolean;
     category?: string;

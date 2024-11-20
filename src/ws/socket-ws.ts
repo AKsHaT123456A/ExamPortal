@@ -1,4 +1,3 @@
-import { LeaderboardServiceSingleton } from '../services/leaderboard-service'; // Import the LeaderboardServiceSingleton
 import WebSocket, { WebSocketServer } from 'ws';
 import url from 'url';
 import { RedisCache } from '../cache/redis-cache';
@@ -25,7 +24,7 @@ class WebSocketServerSingleton {
 
   // Start the WebSocket server
   public async start(): Promise<void> {
-    console.log('WebSocket server started on port ' + this.wss.options.port);
+    console.log('WebSocket server started on port');
   }
 
   // Handle new connections
@@ -33,8 +32,8 @@ class WebSocketServerSingleton {
     const queryParams = url.parse(req.url, true).query;
     const userId = queryParams.userId as string;
     const role = queryParams.role as string;
-    this.wss.on('headers', (headers, req) => {
-      headers.push('Access-Control-Allow-Origin: *');  // Allow connections from any origin
+    this.wss.on('headers', (headers, _req) => {
+      headers.push('Access-Control-Allow-Origin: *'); 
     });
     const redisCache = RedisCache.getInstance(
       constants.REDIS_URL || "redis://localhost:6379"

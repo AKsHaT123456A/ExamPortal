@@ -2,8 +2,10 @@
 import { Request, Response } from "express";
 import QuestionService from "../services/question-service";
 import {
+  AddCodingQuestionResponse,
   AddQuestionRequest,
   AddQuestionResponse,
+  CategoryCodingQuestionsResponse,
   CategoryQuestionsResponse,
 } from "../types/question-type-service";
 import { RedisCache } from "../cache/redis-cache";
@@ -17,7 +19,7 @@ export const addQuestion = async (
 ) => {
   try {
     const questionData: AddQuestionRequest = req.body;
-    const addedQuestion: AddQuestionResponse =
+    const addedQuestion: AddQuestionResponse|AddCodingQuestionResponse =
       await QuestionService.addQuestion(questionData);
 
     return res.status(201).json({
@@ -25,6 +27,7 @@ export const addQuestion = async (
       msg: addedQuestion,
     });
   } catch (error) {
+    console.log(error);
     //@ts-ignore
     return res.status(error.status || 500).json({
       //@ts-ignore
@@ -100,7 +103,7 @@ export const updateQuestion = async (
     const questionId: string = req.params.id;
     const updateData: Partial<AddQuestionRequest> = req.body;
 
-    const updatedQuestion: AddQuestionResponse =
+    const updatedQuestion: AddQuestionResponse|AddCodingQuestionResponse =
       await QuestionService.updateQuestion(questionId, updateData);
 
     return res.status(200).json({
@@ -126,7 +129,7 @@ export const getCategoryQuestions = async (
   try {
     const category: string = req.params.key;
 
-    const categoryQuestions: CategoryQuestionsResponse[] =
+    const categoryQuestions: CategoryQuestionsResponse[] |CategoryCodingQuestionsResponse[]=
       await QuestionService.getCategoryQuestions(category);
 
     return res.status(200).json({

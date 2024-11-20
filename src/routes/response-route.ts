@@ -13,4 +13,6 @@ router.get('/user-responses/:studentNo', responseController.userResponse.bind(re
 
 router.get("/isVisited/user/:id", isVisited);
 
+router.get("/submitted/:studentNo",responseController.submittedReportController.bind(responseController));  
+
 export default router;
