@@ -29,4 +29,21 @@ router.get("/metrics", (req, res) => {
       res.status(500).end('Internal Server Error');
     });
   });
+
+  router.get('/', async (_req, res, _next) => {
+
+    const healthcheck = {
+        uptime: process.uptime(),
+        message: 'OK',
+        reponseTime:process.hrtime(),
+        timestamp: Date.now()
+    };
+    try {
+        res.send(healthcheck);
+    } catch (error) {
+      //@ts-ignore
+        healthcheck.message = error;
+        res.status(503).send();
+    }
+});
 export default router;
